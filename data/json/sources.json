@@ -2,11 +2,11 @@
     "datasets": [
         {
             "name": "Swimming Pools",
-            "location": "sets/swimming-pools.json",
+            "path": "sets/swimming-pools.json",
             "source": "https://bruxellesdata.opendatasoft.com/explore/dataset/swimming-pools"
         }, {
             "name": "Theatres",
-            "location": "sets/theatres.json",
+            "path": "sets/theatres.json",
             "source": "https://bruxellesdata.opendatasoft.com/explore/dataset/theatres"
         }
     ]
