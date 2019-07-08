@@ -1,0 +1,488 @@
+{
+    "type":"FeatureCollection",
+    "features":[
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.346539,
+                    50.8513936
+                ]
+            },
+            "properties":{
+                "nom":"(La) Bellone",
+                "straat":"Vlaamsesteenweg 46",
+                "naam":"La Bellone",
+                "twitter":"https://twitter.com/La_Bellone",
+                "telephone_telefoon":"02 513 33 33",
+                "coordonnees_wgs84":[
+                    50.8513936,
+                    4.346539
+                ],
+                "facebook":"https://www.facebook.com/la.bellone",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.bellone.be",
+                "rue":"Rue de Flandre 46"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3429527,
+                    50.8894456
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre du Copeau",
+                "straat":"E. Wautersstraat 122",
+                "naam":"Th\u00e9\u00e2tre du Copeau",
+                "telephone_telefoon":"02 479 97 74",
+                "coordonnees_wgs84":[
+                    50.8894456,
+                    4.3429527
+                ],
+                "code_postal_postcode":"1020",
+                "site_web_website":"www.theatre-du-copeau.be",
+                "rue":"Rue Emile Wauters 122"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3657158,
+                    50.8461541
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre royal du Parc",
+                "straat":"Wetstraat 3",
+                "naam":"Th\u00e9\u00e2tre royal du Parc",
+                "telephone_telefoon":"02 505 30 30",
+                "coordonnees_wgs84":[
+                    50.8461541,
+                    4.3657158
+                ],
+                "facebook":"https://www.facebook.com/TheatreRoyalduParc\nhttps://www.facebook.com/TheatreRoyalduParc",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.theatreduparc.be",
+                "rue":"Rue de la Loi 3"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3515499,
+                    50.8427501
+                ]
+            },
+            "properties":{
+                "nom":"Bronks",
+                "straat":"Varkensmarkt 15-17",
+                "naam":"Bronks",
+                "telephone_telefoon":"02 219 99 21",
+                "coordonnees_wgs84":[
+                    50.8427501,
+                    4.3515499
+                ],
+                "facebook":"https://www.facebook.com/bronksjeugdtheater/",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.bronks.be",
+                "rue":"Rue du March\u00e9 aux Porcs 15-17"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3596372,
+                    50.8519759
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre La montagne magique",
+                "straat":"Broekstraat 57",
+                "naam":"Th\u00e9\u00e2tre La montagne magique",
+                "telephone_telefoon":"02 210 15 90",
+                "coordonnees_wgs84":[
+                    50.8519759,
+                    4.3596372
+                ],
+                "facebook":"https://www.facebook.com/Th%C3%A9%C3%A2tre-La-montagne-magique-410223079104965/",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.theatremontagnemagique.be",
+                "rue":"Rue du Marais 57"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.346064,
+                    50.8392336
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre les Tanneurs",
+                "straat":"Huidevettersstraat 75",
+                "naam":"Th\u00e9\u00e2tre les Tanneurs",
+                "twitter":"https://twitter.com/LesTanneurs",
+                "telephone_telefoon":"02 512 17 84",
+                "coordonnees_wgs84":[
+                    50.8392336,
+                    4.346064
+                ],
+                "facebook":"https://www.facebook.com/theatrelestanneurs",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.lestanneurs.be",
+                "rue":"Rue des Tanneurs 75"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3471197,
+                    50.8587068
+                ]
+            },
+            "properties":{
+                "nom":"Kaaitheater",
+                "straat":"Sainctelettesquare 20",
+                "naam":"Kaaitheater",
+                "twitter":"https://twitter.com/Kaaitheater",
+                "telephone_telefoon":"02 201 59 59",
+                "coordonnees_wgs84":[
+                    50.8587068,
+                    4.3471197
+                ],
+                "facebook":"https://www.facebook.com/kaaitheater/",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.kaaitheater.be",
+                "rue":"Square Sainctelette 20"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3490191,
+                    50.8408156
+                ]
+            },
+            "properties":{
+                "nom":"(Les) Brigittines",
+                "straat":"Kleine Brigittinenstraat",
+                "naam":"(Les) Brigittines",
+                "telephone_telefoon":"02 213 86 10",
+                "coordonnees_wgs84":[
+                    50.8408156,
+                    4.3490191
+                ],
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.brigittines.be",
+                "rue":"Petite rue des Brigittines"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3463893,
+                    50.8469773
+                ]
+            },
+            "properties":{
+                "nom":"Centre culturel des Riches-Claires",
+                "straat":"Rijkeklarenstraat 24",
+                "naam":"Centre culturel des Riches-Claires",
+                "telephone_telefoon":"02 548 25 80",
+                "coordonnees_wgs84":[
+                    50.8469773,
+                    4.3463893
+                ],
+                "facebook":"https://www.facebook.com/Les-Riches-Claires-227163550668863/",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.lesrichesclaires.be",
+                "rue":"Rue des Riches Claires 24"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.371285,
+                    50.812131
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre de Poche",
+                "straat":"Gymnasiumweg 1A",
+                "naam":"Th\u00e9\u00e2tre de Poche",
+                "twitter":"https://twitter.com/Tdepoche",
+                "telephone_telefoon":"02 649 17 27",
+                "coordonnees_wgs84":[
+                    50.812131,
+                    4.371285
+                ],
+                "facebook":"https://www.facebook.com/poche.be\nhttps://www.facebook.com/poche.be",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.poche.be",
+                "rue":"Chemin du Gymnase 1A"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.351286,
+                    50.8553361
+                ]
+            },
+            "properties":{
+                "nom":"Koninklijke Vlaamse Schouwburg (KVS)",
+                "straat":"Arduinkaai 7",
+                "naam":"Koninklijke Vlaamse Schouwburg (KVS)",
+                "twitter":"https://twitter.com/KVSbrussels",
+                "telephone_telefoon":"02 210 11 12",
+                "coordonnees_wgs84":[
+                    50.8553361,
+                    4.351286
+                ],
+                "facebook":"https://www.facebook.com/KVSbrussel",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.kvs.be",
+                "rue":"Quai aux Pierres de Taille 7"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3593582,
+                    50.8443176
+                ]
+            },
+            "properties":{
+                "nom":"Palais des Beaux-Arts (BOZAR)",
+                "straat":"Ravensteinstraat 23",
+                "naam":"Paleis voor Schone Kunsten (Bozar)",
+                "twitter":"https://twitter.com/bozarbrussels",
+                "telephone_telefoon":"02 507 82 00",
+                "coordonnees_wgs84":[
+                    50.8443176,
+                    4.3593582
+                ],
+                "facebook":"https://www.facebook.com/BOZARbrussels",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.bozar.be",
+                "rue":"Rue Ravenstein 23"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3562531,
+                    50.8519753
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre de la Place des Martyrs",
+                "straat":"Martelaarsplein 22",
+                "naam":"Th\u00e9\u00e2tre de la Place des Martyrs",
+                "telephone_telefoon":"02 223 32 08",
+                "coordonnees_wgs84":[
+                    50.8519753,
+                    4.3562531
+                ],
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.theatredesmartyrs.be",
+                "rue":"Place des Martyrs 22"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3486931,
+                    50.8486591
+                ]
+            },
+            "properties":{
+                "nom":"Beursschouwburg",
+                "straat":"Ortsstraat 20-28",
+                "naam":"Beursschouwburg",
+                "twitter":"https://twitter.com/Beursschouwburg",
+                "telephone_telefoon":"02 550 03 50",
+                "coordonnees_wgs84":[
+                    50.8486591,
+                    4.3486931
+                ],
+                "facebook":"https://www.facebook.com/Beursschouwburg",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.beursschouwburg.be",
+                "rue":"Rue Orts 20-28"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3541316,
+                    50.8539091
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre national de la Communaut\u00e9 Wallonie-Bruxelles",
+                "straat":"Jacqmainlaan 111-115",
+                "naam":"Th\u00e9\u00e2tre national de la Communaut\u00e9 Wallonie-Bruxelles",
+                "telephone_telefoon":"02 203 41 55",
+                "coordonnees_wgs84":[
+                    50.8539091,
+                    4.3541316
+                ],
+                "facebook":"https://www.facebook.com/Theatre.National/?fref=ts",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.theatrenational.be",
+                "rue":"Boulevard Emile Jacqmain 111-115"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3533511,
+                    50.8500949
+                ]
+            },
+            "properties":{
+                "nom":"(La) Monnaie",
+                "straat":"Muntplein",
+                "naam":"De Munt",
+                "twitter":"https://twitter.com/LaMonnaieDeMunt",
+                "telephone_telefoon":"070 23 39 39",
+                "coordonnees_wgs84":[
+                    50.8500949,
+                    4.3533511
+                ],
+                "facebook":"https://www.facebook.com/LaMonnaieDeMunt/",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.demunt.be",
+                "rue":"Place de la Monnaie"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3494041,
+                    50.8533627
+                ]
+            },
+            "properties":{
+                "nom":"(Le) Jardin de ma Soeur",
+                "straat":"Grootgodhuisstraat",
+                "naam":"(Le) Jardin de ma S\u0153ur",
+                "telephone_telefoon":"02 217 65 82",
+                "coordonnees_wgs84":[
+                    50.8533627,
+                    4.3494041
+                ],
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.lejardindemasoeur.be",
+                "rue":"Rue du Grand Hospice"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3557131,
+                    50.8484961
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre des Galeries",
+                "straat":"Koningsgalerij 32",
+                "naam":"Th\u00e9\u00e2tre des Galeries",
+                "telephone_telefoon":"02 512 04 07",
+                "coordonnees_wgs84":[
+                    50.8484961,
+                    4.3557131
+                ],
+                "facebook":"https://www.facebook.com/Th%C3%A9%C3%A2tre-Royal-des-Galeries-189872334375439/",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.theatredesgaleries.be",
+                "rue":"Galerie du Roi 32"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3533904,
+                    50.847226
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre royal de Toone",
+                "straat":"Grasmarkt 66",
+                "naam":"Koninklijk Poppentheater Toone",
+                "telephone_telefoon":"02 511 71 37",
+                "coordonnees_wgs84":[
+                    50.847226,
+                    4.3533904
+                ],
+                "facebook":"https://www.facebook.com/Toone-1512135172403717/?ref=hl",
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.toone.be",
+                "rue":"Rue du March\u00e9 aux Herbes"
+            }
+        },
+        {
+            "type":"Feature",
+            "geometry":{
+                "type":"Point",
+                "coordinates":[
+                    4.3527148,
+                    50.8407055
+                ]
+            },
+            "properties":{
+                "nom":"Th\u00e9\u00e2tre La Samaritaine",
+                "straat":"Samaritanessestraat 16",
+                "naam":"Th\u00e9\u00e2tre La Samaritaine",
+                "telephone_telefoon":"02 511 33 95",
+                "coordonnees_wgs84":[
+                    50.8407055,
+                    4.3527148
+                ],
+                "code_postal_postcode":"1000",
+                "site_web_website":"www.lasamaritaine.be",
+                "rue":"Rue de la Samaritaine 16"
+            }
+        }
+    ]
+}
