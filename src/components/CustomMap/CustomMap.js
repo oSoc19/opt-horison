@@ -1,11 +1,10 @@
 // @flow
 import React, { Component} from 'react';
-import PropTypes from 'prop-types';
 
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
 const Map = ReactMapboxGl({
-	accessToken: '<ADD_YOUR_OWN_TOKEN_HERE>',
+	accessToken: 'pk.eyJ1IjoidGltdXRhYmxlIiwiYSI6ImNqeG45MXp1YzAwN3kzbXBnZnlhaGNndXQifQ.ZpWwVyzwLHNM6dQxdJAx1g',
   });
 
 class CustomMap extends Component {
@@ -16,6 +15,7 @@ class CustomMap extends Component {
 	render() {
 		return (
 		<Map
+			className="CustomMap"
 			style="mapbox://styles/mapbox/streets-v11"
 			center={[4.352440, 50.846480]} // hardcoded center point in Brussels
 			containerStyle={{

@@ -1,0 +1,12 @@
+.Sidebar {
+    width: 300px;
+    height: auto;
+    grid-area: "sidebar";
+    /*display: none;*/
+
+    background: #FFFFFF;
+    mix-blend-mode: normal;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    box-shadow: 4px 6px 4px rgba(0, 0, 0, 0.4);
+}
