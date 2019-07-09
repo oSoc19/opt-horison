@@ -1,0 +1,13 @@
+{
+    "datasets": [
+        {
+            "name": "Swimming Pools",
+            "path": "sets/swimming-pools.json",
+            "source": "https://bruxellesdata.opendatasoft.com/explore/dataset/swimming-pools"
+        }, {
+            "name": "Theatres",
+            "path": "sets/theatres.json",
+            "source": "https://bruxellesdata.opendatasoft.com/explore/dataset/theatres"
+        }
+    ]
+}
