@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 
 const Map = ReactMapboxGl({
-	accessToken: '<ADD_YOUR_OWN_TOKEN_HERE>',
-  });
+    accessToken: process.env.REACT_APP_MABPOX_TOKEN,
+});
 
 class CustomMap extends Component {
 	static defaultProps = {};
