@@ -4,7 +4,7 @@ import ReactMapboxGl from 'react-mapbox-gl';
 import './CustomMap.css';
 
 const Map = ReactMapboxGl({
-	accessToken: 'pk.eyJ1IjoidGltdXRhYmxlIiwiYSI6ImNqeG45MXp1YzAwN3kzbXBnZnlhaGNndXQifQ.ZpWwVyzwLHNM6dQxdJAx1g',
+    accessToken: process.env.REACT_APP_MABPOX_TOKEN,
 });
 
 export default class CustomMap extends Component {
