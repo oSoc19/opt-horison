@@ -4,6 +4,7 @@
 const fs = require('fs');
 const util  = require('util');
 const fsRead = util.promisify(fs.readFile);
+const pointsWithinPolygon = require('@turf/points-within-polygon');
 
 class PointSet {
     constructor(name, path, source) {
@@ -17,18 +18,18 @@ class PointSet {
         let rawData = await fsRead("data/json/" + this._path);
         this.data = JSON.parse(rawData);
     }
+
+    intersect(polygons) {
+        return pointsWithinPolygon(points, polygons);
+    }
 }
 
-async function loadPointSets() {
+async function getAllPointSets() {
     let createPointSet = ps => new PointSet(ps["name"], ps["path"], ps["source"]);
     let sources = JSON.parse(await fsRead("data/json/sources.json"));
     let pointSets = sources.datasets.map(createPointSet);
 
-    for (let pointSet of pointSets) {
-        await pointSet.load();
-    }
-
     return pointSets;
 }
 
-module.exports = { loadPointSets };
+module.exports = { PointSet, getAllPointSets };
