@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@turf/intersect": "^6.1.3",
+    "@turf/points-within-polygon": "^5.1.5",
     "mapbox-gl": "^1.1.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
