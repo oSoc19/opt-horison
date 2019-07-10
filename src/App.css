@@ -1,5 +1,3 @@
-.container {
-  display: grid;
-  grid-template-areas: "sidebar map";
-  align-content: center;
+.ui.segment {
+    margin: 0 !important;
 }
