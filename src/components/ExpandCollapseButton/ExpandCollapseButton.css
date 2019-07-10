@@ -1,0 +1,13 @@
+.arrow-hide {
+    position: fixed;
+    top: 50px;
+    left: 340px;
+    z-index: 999 !important;
+}
+
+.arrow-show {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 999 !important;
+}
