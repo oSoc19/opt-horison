@@ -1,48 +1,33 @@
 import React, { Component} from 'react';
-import { Table, Button } from 'semantic-ui-react';
-import _ from 'lodash'
+import { Table, Button, Transition } from 'semantic-ui-react';
+import _ from 'lodash';
+import User from '../../models/';
+import Participant from '../Participant';
 
 export default class UserTab extends Component {
 
 	constructor(props) {
 		super(props);
 
-		const tableData = [
-			{
-				guid: '1fb13332-d20f-4298-b89a-fe0bf7603f88',
-				name: 'Tinaël',
-				duration: 15,
-				mode: 'cycling'
-			},
-			{
-				guid: '48e9187d-db8d-43c5-8097-3f2559880a0a',
-				name: 'Bert',
-				duration: 20,
-				mode: 'driving'
-			},
-			{
-				guid: '4785ad2c-0916-4566-a7a6-830ccfc1dd55',
-				name: 'Tim B.',
-				duration: 5,
-				mode: 'walking'
-			}
-		];
+		this.handleSort = this.handleSort.bind(this);
+		this.handleAdd = this.handleAdd.bind(this);
+		this.handleRemove = this.handleRemove.bind(this);
 
 		this.state = {
 			column: null,
-			data: tableData,
+			data: [new User('Tinaël', 15, 'car')],
 			direction: null
 		};
 	}
 
-	handleSort = clickedColumn => () => {
+	handleSort = (clickedColumn) => {
 		const { column, data, direction } = this.state;
 	
 		if (column !== clickedColumn) {
 		  this.setState({
 			column: clickedColumn,
 			data: _.sortBy(data, [clickedColumn]),
-			direction: 'ascending',
+			direction: 'ascending'
 		  });
 	
 		  return;
@@ -54,48 +39,80 @@ export default class UserTab extends Component {
 		});
 	}
 
+	handleAdd = () => {
+		let { data } = this.state;
+
+		let addedRow = new User('Bert', 20, 'bike');
+		data.push(addedRow);
+
+		this.setState({data});
+	}
+
+	handleRemove = (guid) => {
+		let { data } = this.state;
+
+		let deletedRow = data.find(p => p.guid === guid);
+		if (deletedRow) {
+			data.splice(data.indexOf(deletedRow), 1);
+		}
+
+		this.setState({data});
+	}
+
 	render() {
 		const { column, data, direction } = this.state;
 
 		return (
-			<Table sortable celled>
+			<Table sortable celled compact>
 				<Table.Header>
 					<Table.Row>
 						<Table.HeaderCell 
 							sorted={column === 'name' ? direction : null}
-							onClick={this.handleSort('name')}
-						>
-						Participant names
-						</Table.HeaderCell>
+							onClick={() => this.handleSort('name')}
+							content='Participant' 
+						/>
 						<Table.HeaderCell
 							sorted={column === 'duration' ? direction : null}
-							onClick={this.handleSort('duration')}
-						>
-						Max. duration (min)
-						</Table.HeaderCell>
+							onClick={() => this.handleSort('duration')}
+							content='Max Duration'
+						/>
 						<Table.HeaderCell
 							sorted={column === 'mode' ? direction : null}
-							onClick={this.handleSort('mode')}
-						>
-						Transport mode
-						</Table.HeaderCell>
+							onClick={() => this.handleSort('mode')}
+							content='Mode'
+						/>
+						<Table.HeaderCell
+							content='Delete?'
+						/>
 					</Table.Row>
 				</Table.Header>
 
-				<Table.Body>
-					{_.map(data, ({ guid, name, duration, mode }) => (
-					<Table.Row key={guid}>
-						<Table.Cell>{name}</Table.Cell>
-						<Table.Cell>{duration}</Table.Cell>
-						<Table.Cell>{mode}</Table.Cell>
-					</Table.Row>
-					))}
-				</Table.Body>
+				<Transition.Group
+					as={Table.Body}
+					duration={500}
+				>
+					{_.map(data,
+						(participant) => 
+						<Participant
+							key={participant.guid}
+							{...participant}
+							onParticipantRemove={this.handleRemove}
+						/>
+					)}
+				</Transition.Group>
 
 				<Table.Footer fullWidth>
 				<Table.Row>
-				  <Table.HeaderCell colSpan='3'>
-					<Button icon='user' labelPosition='left' primary size='small' content='Add participant' />
+				  <Table.HeaderCell colSpan='4'>
+					<Button 
+						icon='add user' 
+						labelPosition='left' 
+						color='blue'
+						inverted
+						size='small' 
+						content='Add participant' 
+						onClick={this.handleAdd}
+					/>
 				  </Table.HeaderCell>
 				</Table.Row>
 			  </Table.Footer>
