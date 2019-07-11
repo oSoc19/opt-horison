@@ -19,7 +19,33 @@ KBC.longitude = 4.346777;
 KBC.latitude = 50.860929;
 Gaucheret.longitude = 4.360043;
 Gaucheret.latitude = 50.864025;
+function multipleOverlap(locations,max){
+    var generators =[];
+    for(location of locations){
+        var generator = await makegenerator(location); 
+        generators.push(generator);       
+    }
+    var isochrones = [];
+    for( generator of generators){
+        var isochrone = await generateIsochroneFromGenerator(generator,max);
+        isochrones.push(isochrone);
+    }
 
+
+}
+function multipleIntersection(isochrones){
+    var result = intersect(isochrones.pop(),isochrones.pop());
+    while( result != null && isochrones.length >0){
+        result = intersect(result,isochrones.pop());
+    }
+    if(result == null){
+        console.error("no intersection found")
+    }
+    else{
+        
+    }
+
+}
 async function findoptimum(location1, location2, max){
     var generator1 = await makegenerator(location1);
     var generator2 = await makegenerator(location2);
