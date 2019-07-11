@@ -1,6 +1,8 @@
 import React, { Component} from 'react';
 import { Icon } from 'semantic-ui-react';
 
+import './TransportModeIcon.css';
+
 export default class TransportModeIcon extends Component {
 	constructor(props) {
 		super(props);

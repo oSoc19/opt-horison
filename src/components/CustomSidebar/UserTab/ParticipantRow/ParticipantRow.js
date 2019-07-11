@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Table, Header, Button, Icon } from 'semantic-ui-react';
 import TransportModeIcon from '../TransportModeIcon/TransportModeIcon';
 
-export default class Participant extends Component {
+import './ParticipantRow.css';
+
+export default class ParticipantRow extends Component {
 	render() {
 		const { guid, name, duration, mode } = this.props;
 		return (

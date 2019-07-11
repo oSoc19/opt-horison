@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Sidebar, Tab } from 'semantic-ui-react';
-import UserTab from '../UserTab';
-import POITab from '../POITab';
+import UserTab from './UserTab';
+import POITab from './POITab';
 
 import './CustomSidebar.css';
 

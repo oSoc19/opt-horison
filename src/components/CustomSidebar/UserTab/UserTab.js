@@ -1,8 +1,10 @@
 import React, { Component} from 'react';
 import { Table, Button, Transition } from 'semantic-ui-react';
 import _ from 'lodash';
-import User from '../../models/';
-import Participant from '../Participant';
+import User from '../../../models';
+import ParticipantRow from './ParticipantRow';
+
+import './UserTab.css';
 
 export default class UserTab extends Component {
 
@@ -54,6 +56,8 @@ export default class UserTab extends Component {
 		let deletedRow = data.find(p => p.guid === guid);
 		if (deletedRow) {
 			data.splice(data.indexOf(deletedRow), 1);
+		} else {
+			console.error('Deleting an undisplayed row is impossible!', deletedRow);
 		}
 
 		this.setState({data});
@@ -93,7 +97,7 @@ export default class UserTab extends Component {
 				>
 					{_.map(data,
 						(participant) => 
-						<Participant
+						<ParticipantRow
 							key={participant.guid}
 							{...participant}
 							onParticipantRemove={this.handleRemove}
@@ -102,19 +106,19 @@ export default class UserTab extends Component {
 				</Transition.Group>
 
 				<Table.Footer fullWidth>
-				<Table.Row>
-				  <Table.HeaderCell colSpan='4'>
-					<Button 
-						icon='add user' 
-						labelPosition='left' 
-						color='blue'
-						inverted
-						size='small' 
-						content='Add participant' 
-						onClick={this.handleAdd}
-					/>
-				  </Table.HeaderCell>
-				</Table.Row>
+					<Table.Row>
+						<Table.HeaderCell colSpan='4'>
+							<Button 
+								icon='add user' 
+								labelPosition='left' 
+								color='blue'
+								inverted
+								size='small' 
+								content='Add participant' 
+								onClick={this.handleAdd}
+							/>
+						</Table.HeaderCell>
+					</Table.Row>
 			  </Table.Footer>
 			</Table>
 		);
