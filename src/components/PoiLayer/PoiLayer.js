@@ -1,57 +1,60 @@
 // @flow
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
-import PointSets, { PointSet } from '../../../data/pointsets.js';
+import { Layer, Feature } from 'react-mapbox-gl';
 
 class PoiLayer extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { visiblePoints: [] }
+    static defaultProps = {
+        polygons: [],
+        points: []
     }
 
-    async componentDidMount() {
-        // Load all of the pointSets from the filesystem into memory,
-        // intersect them with the currently highlighted polygon and
-        // reflect the results into the Layer's state.
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            pointCollection: []
+        };
+    }
+
+    componentDidMount() {
+        let points = []
+
         for (let pointSet of this.props.points) {
-            await pointSet.load();
-            this.setState({ visiblePoints: pointSet.intersect(this.props.polygons) });
+            let intersectingPoints = pointSet.intersect(this.props.polygons);
+            intersectingPoints.image = pointSet.image;
+            intersectingPoints.name = pointSet.name
+            points.push(intersectingPoints);
         }
 
-        console.log(this.state);
+        this.setState({ pointCollection: points });
+        console.log(this.state.pointCollection);
     }
 
     render() {
-        return;
-        /*return (
-            <Layer>
-                {this.state.visiblePoints.map(point => (
-                    <Feature coordinates=point.coords properties=point.properties>
-                    </Feature>))}
-            </Layer>
-        );*/
+        return (
+            this.state.pointCollection.map(collection =>
+                <Layer
+                    type="symbol"
+                    layout={{
+                        "icon-image": `${collection.image}-15`,
+                        "icon-allow-overlap": true,
+                        "text-field": collection.name,
+                        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+                        "text-size": 11,
+                        "text-transform": "uppercase",
+                        "text-letter-spacing": 0.05,
+                        "text-offset": [0, 1.5]
+                    }}
+                    paint={{
+                        "text-color": "#202",
+                        "text-halo-color": "#fff",
+                        "text-halo-width": 2
+                    }}>
+                    {collection.features.map(point =>
+                        <Feature coordinates={point.geometry.coordinates}/>)}
+                </Layer>)
+        );
     }
-}
-
-PoiLayer.propTypes = {
-    polygons: PropTypes.arrayOf(PropTypes.exact({
-        type: PropTypes.string,
-        features: PropTypes.arrayOf(PropTypes.exact({
-            type: PropTypes.string,
-            geometry: PropTypes.arrayOf(PropTypes.exact({
-                type: PropTypes.string,
-                coordinates: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)))
-            })),
-            properties: PropTypes.object
-        }))
-    })),
-    points: PropTypes.arrayOf(PropTypes.instanceOf(PointSet))
-}
-
-PoiLayer.defaultProps = {
-    polygons: [],
-    points: []
 }
 
 export default PoiLayer;

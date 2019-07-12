@@ -1,35 +1,37 @@
-// Note: this part of the project uses require() because node support for ES6
-// modules is still an experimental feature. React uses webpack, which allows us
-// to use the ES6 modules.
-const fs = require('fs');
-const util  = require('util');
-const fsRead = util.promisify(fs.readFile);
-const pointsWithinPolygon = require('@turf/points-within-polygon');
+import pointsWithinPolygon from '@turf/points-within-polygon';
+import { point, polygon } from '@turf/helpers';
+
+// GeoJSON Data Files
+import barData from './json/bars.json'
+import coffeeData from './json/cafes.json'
+import restoData from './json/restos.json'
 
 class PointSet {
-    constructor(name, path, source) {
-        this._path = path;
+    constructor(name, data, image) {
         this.name = name;
-        this.source = source;
-        this.data = {};
-    }
-
-    async load() {
-        let rawData = await fsRead("data/json/" + this._path);
-        this.data = JSON.parse(rawData);
+        this.image = image;
+        this.data = data;
     }
 
     intersect(polygons) {
-        return pointsWithinPolygon(points, polygons);
+        let result = [];
+
+        for (let feature of polygons.features) {
+            let poly = polygon(feature.geometry.coordinates)
+            result = pointsWithinPolygon(this.data, poly);
+        }
+
+        return result;
     }
 }
 
-async function getAllPointSets() {
-    let createPointSet = ps => new PointSet(ps["name"], ps["path"], ps["source"]);
-    let sources = JSON.parse(await fsRead("data/json/sources.json"));
-    let pointSets = sources.datasets.map(createPointSet);
-
-    return pointSets;
+function getAllPointSets() {
+    return [
+        new PointSet("Bar", barData, "bar"),
+        new PointSet("Coffee", coffeeData, "cafe"),
+        new PointSet("Restaurant", restoData, "restaurant"),
+    ];
 }
 
-module.exports = { PointSet, getAllPointSets };
+export { PointSet, getAllPointSets };
+export default { PointSet, getAllPointSets };
