@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import PointOfInterest from './PointOfInterest';
 
 import './POITab.css';
 
