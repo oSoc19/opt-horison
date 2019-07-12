@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Sidebar, Tab } from 'semantic-ui-react';
+import UserTab from './UserTab';
+import POITab from './POITab';
 
 import './CustomSidebar.css';
 
@@ -16,8 +18,27 @@ export default class CustomSidebar extends Component {
     render() {
         const visible = this.props.visible;
         const panes = [
-            { menuItem: 'Participants', render: () => <Tab.Pane><h2>Participants poll (name, max duration, transport mode)</h2></Tab.Pane> },
-            { menuItem: 'Meeting locations', render: () => <Tab.Pane><h2>Checkboxes for possible meeting locations</h2></Tab.Pane> }
+            { 
+                menuItem: {
+                    content: 'Participants',
+                    icon: 'users',
+                    key: 'users'
+                },
+                pane: {
+                    key: 'usersPane',
+                    content: (<UserTab></UserTab>)
+                }
+            },
+            { 
+                menuItem: {
+                    content: 'Meeting locations',
+                    icon:'coffee', key:'locations'
+                },
+                pane: {
+                    key: 'locationsPane',
+                    content: (<POITab></POITab>)
+                }
+            }
         ];
   
         return (
@@ -27,10 +48,12 @@ export default class CustomSidebar extends Component {
                 direction='left'
                 onHide={this.onHide}
                 visible={visible}
-                width='wide'
+                width='very wide'
 
                 as={Tab}
                 panes={panes}
+                menu={{color:'blue'}}
+                renderActiveOnly={false}
             >
             </Sidebar>
         );
