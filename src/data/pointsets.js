@@ -1,5 +1,5 @@
 import pointsWithinPolygon from '@turf/points-within-polygon';
-import { point, polygon } from '@turf/helpers';
+import { polygon } from '@turf/helpers';
 
 // GeoJSON Data Files
 import barData from './json/bars.json'
@@ -14,11 +14,14 @@ class PointSet {
     }
 
     intersect(polygons) {
-        let result = [];
+        let result = {
+            type: "FeatureCollection",
+            features: []
+        };
 
         for (let feature of polygons.features) {
-            let poly = polygon(feature.geometry.coordinates)
-            result = pointsWithinPolygon(this.data, poly);
+            let poly = polygon(feature.geometry.coordinates);
+            result.features = result.features.concat(pointsWithinPolygon(this.data, poly).features);
         }
 
         return result;

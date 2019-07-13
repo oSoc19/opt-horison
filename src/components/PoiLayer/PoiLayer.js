@@ -4,36 +4,14 @@ import { Layer, Feature } from 'react-mapbox-gl';
 
 class PoiLayer extends Component {
     static defaultProps = {
-        polygons: [],
         points: []
-    }
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            pointCollection: []
-        };
-    }
-
-    componentDidMount() {
-        let points = []
-
-        for (let pointSet of this.props.points) {
-            let intersectingPoints = pointSet.intersect(this.props.polygons);
-            intersectingPoints.image = pointSet.image;
-            intersectingPoints.name = pointSet.name
-            points.push(intersectingPoints);
-        }
-
-        this.setState({ pointCollection: points });
-        console.log(this.state.pointCollection);
     }
 
     render() {
         return (
-            this.state.pointCollection.map(collection =>
+            this.props.points.map(collection =>
                 <Layer
+                    key={collection.name}
                     type="symbol"
                     layout={{
                         "icon-image": `${collection.image}-15`,
@@ -50,8 +28,10 @@ class PoiLayer extends Component {
                         "text-halo-color": "#fff",
                         "text-halo-width": 2
                     }}>
-                    {collection.features.map(point =>
-                        <Feature coordinates={point.geometry.coordinates}/>)}
+                    {collection.features.map((point, index) =>
+                        <Feature
+                            key={index}
+                            coordinates={point.geometry.coordinates}/>)}
                 </Layer>)
         );
     }
