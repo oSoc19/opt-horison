@@ -3,6 +3,7 @@ import { Table, Button, Transition } from 'semantic-ui-react';
 import _ from 'lodash';
 import User from '../../../models';
 import ParticipantRow from './ParticipantRow';
+import UserCreationModal from './UserCreationModal/UserCreationModal';
 
 import './UserTab.css';
 
@@ -14,8 +15,11 @@ export default class UserTab extends Component {
 		this.handleSort = this.handleSort.bind(this);
 		this.handleAdd = this.handleAdd.bind(this);
 		this.handleRemove = this.handleRemove.bind(this);
+		this.showModal = this.showModal.bind(this);
+		this.onModalClose = this.onModalClose.bind(this);
 
 		this.state = {
+			modalOpen: false,
 			column: null,
 			data: [new User('Tinaël', 15, 'car')],
 			direction: null
@@ -41,13 +45,14 @@ export default class UserTab extends Component {
 		});
 	}
 
-	handleAdd = () => {
-		let { data } = this.state;
+	handleAdd = (participant) => {
+		const {data} = this.state;
 
-		let addedRow = new User('Bert', 20, 'bike');
-		data.push(addedRow);
+		console.log(participant);
+		data.push(participant);
 
 		this.setState({data});
+		this.onModalClose();
 	}
 
 	handleRemove = (guid) => {
@@ -63,64 +68,79 @@ export default class UserTab extends Component {
 		this.setState({data});
 	}
 
+	showModal = () => {
+		this.setState({modalOpen: true});
+	}
+
+	onModalClose = () => {
+		this.setState({modalOpen: false});
+	}
+
 	render() {
 		const { column, data, direction } = this.state;
 
 		return (
-			<Table sortable celled compact>
-				<Table.Header>
-					<Table.Row>
-						<Table.HeaderCell 
-							sorted={column === 'name' ? direction : null}
-							onClick={() => this.handleSort('name')}
-							content='Participant' 
-						/>
-						<Table.HeaderCell
-							sorted={column === 'duration' ? direction : null}
-							onClick={() => this.handleSort('duration')}
-							content='Max Duration'
-						/>
-						<Table.HeaderCell
-							sorted={column === 'mode' ? direction : null}
-							onClick={() => this.handleSort('mode')}
-							content='Mode'
-						/>
-						<Table.HeaderCell
-							content='Delete?'
-						/>
-					</Table.Row>
-				</Table.Header>
-
-				<Transition.Group
-					as={Table.Body}
-					duration={500}
-				>
-					{_.map(data,
-						(participant) => 
-						<ParticipantRow
-							key={participant.guid}
-							{...participant}
-							onParticipantRemove={this.handleRemove}
-						/>
-					)}
-				</Transition.Group>
-
-				<Table.Footer fullWidth>
-					<Table.Row>
-						<Table.HeaderCell colSpan='4'>
-							<Button 
-								icon='add user' 
-								labelPosition='left' 
-								color='blue'
-								inverted
-								size='small' 
-								content='Add participant' 
-								onClick={this.handleAdd}
+			<div>
+				<UserCreationModal 
+					modalOpen={this.state.modalOpen} 
+					closeModal={this.onModalClose} 
+					addParticipant={this.handleAdd} 
+				/>
+				<Table sortable celled compact>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell 
+								sorted={column === 'name' ? direction : null}
+								onClick={() => this.handleSort('name')}
+								content='Participant' 
 							/>
-						</Table.HeaderCell>
-					</Table.Row>
-			  </Table.Footer>
-			</Table>
+							<Table.HeaderCell
+								sorted={column === 'duration' ? direction : null}
+								onClick={() => this.handleSort('duration')}
+								content='Max Duration'
+							/>
+							<Table.HeaderCell
+								sorted={column === 'mode' ? direction : null}
+								onClick={() => this.handleSort('mode')}
+								content='Mode'
+							/>
+							<Table.HeaderCell
+								content='Delete?'
+							/>
+						</Table.Row>
+					</Table.Header>
+
+					<Transition.Group
+						as={Table.Body}
+						duration={500}
+					>
+						{_.map(data,
+							(participant) => 
+							<ParticipantRow
+								key={participant.guid}
+								{...participant}
+								onParticipantRemove={this.handleRemove}
+							/>
+						)}
+					</Transition.Group>
+
+					<Table.Footer fullWidth>
+						<Table.Row>
+							<Table.HeaderCell colSpan='4'>
+								<Button 
+									icon='add user' 
+									labelPosition='left' 
+									color='blue'
+									inverted
+									size='small' 
+									content='Add participant' 
+									onClick={this.showModal}
+								/>
+							</Table.HeaderCell>
+						</Table.Row>
+				</Table.Footer>
+				</Table>
+			</div>
 		);
 	}
 }
