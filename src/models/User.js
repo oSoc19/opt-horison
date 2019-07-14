@@ -7,8 +7,8 @@ export default class User {
         this.guid = uuidv1();
         this.name = name;
         this.duration = duration;
-        this.mode = mode;
-        this.location = undefined;
+        this.mode = mode[0];
+        this.location = undefined; // trigger setter with default value
     }
 
     set location(value = { lng: 4.352440, lat: 50.846480 }) {
