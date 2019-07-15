@@ -3,4 +3,5 @@ class Geometry {
 		this.coordinates = coordinates;
 	}
 }
-module.exports = {Geometry}
+
+export { Geometry }

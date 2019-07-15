@@ -1,12 +1,15 @@
-var { Feature } = require('./Feature');
+import { Feature } from './Feature.js';
+
 class FeatureCollection {
-	constructor() {
-		this.type = "FeatureCollection",
-		this.features = [];
+    constructor() {
+        this.type = "FeatureCollection";
+        this.features = [];
     }
+
     addOneFeature(feature){
         this.features.push(feature);
     }
+
     addFeature(polygonData,timeinmillisec){
         //polygonData.push(polygonData[0]);
         var feature = new Feature(polygonData,timeinmillisec);
@@ -15,4 +18,4 @@ class FeatureCollection {
 
 }
 
-module.exports = {FeatureCollection};
+export { FeatureCollection };

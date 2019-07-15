@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Sidebar, Segment } from 'semantic-ui-react';
 import CustomSidebar from './components/CustomSidebar';
 import CustomMap from './components/CustomMap';
-import ExpandCollapseButton from './components/ExpandCollapseButton';
+import ExpandCollapseButton from './components/CustomSidebar/ExpandCollapseButton';
 
 import './App.css';
 
