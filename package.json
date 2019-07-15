@@ -2,6 +2,7 @@
   "name": "horison",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@turf/helpers": "^6.1.4",
     "@turf/intersect": "^6.1.3",

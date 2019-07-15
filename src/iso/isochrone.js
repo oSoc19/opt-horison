@@ -20,7 +20,7 @@ Gaucheret.latitude = 50.864025;
 async function multipleOverlap(locations,max){
     var generators =[];
     for(location of locations){
-        var generator = await makegenerator(location); 
+        var generator =  makegenerator(location); 
         generators.push(generator);       
     }
     var isochrones = [];
@@ -48,8 +48,8 @@ function multipleIntersection(isochrones){
 */
 
 async function findoptimum(location1, location2, max){
-    var generator1 = await makegenerator(location1);
-    var generator2 = await makegenerator(location2);
+    var generator1 = makegenerator(location1);
+    var generator2 = makegenerator(location2);
     var collection1 = new FeatureCollection();
     var collection2 = new FeatureCollection();
 
@@ -86,7 +86,7 @@ async function findoptimum(location1, location2, max){
 }
 
 async function generateAllIsoChrones(location, max){
-    let generator = await makegenerator(location);
+    let generator = makegenerator(location);
     let collection = new FeatureCollection();
     let intervals = generateIntervals(max);
     for(let interval of intervals) {
@@ -116,8 +116,9 @@ async function generateIsochroneFromGenerator(generator,timeinminutes){
     return feature; 
 }
 
-async function makegenerator(location){
-    return await new Planner.IsochroneGenerator(location);
+function makegenerator(location){
+    var result = new Planner.IsochroneGenerator(location);
+    return result;
 }
 
 /* async function generateIsochrone(location,timeinminutes){
