@@ -19,7 +19,8 @@ KBC.longitude = 4.346777;
 KBC.latitude = 50.860929;
 Gaucheret.longitude = 4.360043;
 Gaucheret.latitude = 50.864025;
-function multipleOverlap(locations,max){
+/** beginning of multiOverlap algorithms.
+async function multipleOverlap(locations,max){
     var generators =[];
     for(location of locations){
         var generator = await makegenerator(location); 
@@ -42,10 +43,12 @@ function multipleIntersection(isochrones){
         console.error("no intersection found")
     }
     else{
-        
+        //do something with the result
+        //question: do we want to return null if no intersection found? probobly right?
     }
 
 }
+*/
 async function findoptimum(location1, location2, max){
     var generator1 = await makegenerator(location1);
     var generator2 = await makegenerator(location2);
@@ -74,10 +77,13 @@ async function findoptimum(location1, location2, max){
             console.log("start intersection");
             console.log(intersection.geometry.coordinates);
             console.log("end of intersection");
+            return intersection;
         }
         else{
             //TODO: integrate this message in visuals
             console.log("There is no place for you to meet within " + max +" minutes");
+            console.log(intersection);
+            return collection1;
         }
        }
 }
@@ -144,16 +150,8 @@ function scaleTime(timeinminutes){
     return timeinminutes * sectomilli * mintosec;
 }
 async function run(){
-    const fs = require('fs');
-    console.log("in");
-    var bosaIsochrones = await generateAllIsoChrones(Gaucheret,20);
-    console.log("out");
-    var stringified = JSON.stringify(bosaIsochrones);
-    console.log(stringified);
-    console.log("Number of features: "+ bosaIsochrones.features.length);
-    fs.writeFile('Output.txt',stringified, (err) =>{
-        if (err) console.error(error);
-    });
+    var overlap = await findoptimum(bosa, herman, 15);
+    console.log("overlap: " + overlap.type);
     
     
 }
