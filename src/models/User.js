@@ -1,17 +1,15 @@
 import uuidv1 from 'uuid/v1';
 
 export default class User {
-    constructor(name, duration, mode) {
-        this._location = {};
-        
+    constructor(name, duration, mode, lngLat = [4.352440, 50.846480]) {       
         this.guid = uuidv1();
         this.name = name;
         this.duration = duration;
         this.mode = mode[0];
-        this.location = undefined; // trigger setter with default value
+        this.location = lngLat;
     }
 
-    set location(value = { lng: 4.352440, lat: 50.846480 }) {
+    set location(value) {
         this._location = value;
     }
 

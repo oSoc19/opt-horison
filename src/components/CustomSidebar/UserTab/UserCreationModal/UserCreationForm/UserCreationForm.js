@@ -63,13 +63,9 @@ export default class UserCreationForm extends Component {
 			this.setState({formError: true});
 			return;
 		}
-
 		this.setState({formError: false});
-		
-		// create user, add to list and add marker on map
-		console.log(this.state);
-		
-		this.props.addParticipant(new User(name, duration, mode));
+			
+		this.props.addParticipant(new User(name, duration, mode, this.props.initialUserLocation));
 	}
 
 	onChange (e, {name, value}) {
