@@ -6,6 +6,10 @@ class FeatureCollection {
         this.features = [];
     }
 
+    addOneFeature(feature){
+        this.features.push(feature);
+    }
+
     addFeature(polygonData,timeinmillisec){
         //polygonData.push(polygonData[0]);
         var feature = new Feature(polygonData,timeinmillisec);
