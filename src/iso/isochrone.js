@@ -16,20 +16,40 @@ KBC.latitude = 50.860929;
 Gaucheret.longitude = 4.360043;
 Gaucheret.latitude = 50.864025;
 
-/** beginning of multiOverlap algorithms.
+/** beginning of multiOverlap algorithms.*/
 async function multipleOverlap(locations,max){
     var generators =[];
-    for(location of locations){
-        var generator =  makegenerator(location); 
-        generators.push(generator);       
+    var collections = [];
+    for(const loc of locations){
+        var generator =  makegenerator(loc); 
+        generators.push(generator);
+        collections.push(new FeatureCollection());       
     }
-    var isochrones = [];
-    for( generator of generators){
-        var isochrone = await generateIsochroneFromGenerator(generator,max);
-        isochrones.push(isochrone);
+    if(max < 5){
+        max = 5;
+        console.log("max should be bigger than 5");// replace this of force minimum of 5
     }
-
-
+    var intervals = generateIntervals(max);
+    var i = 0;
+    var overlap = null;
+    while(i < collections.length && overlap == null ){
+        var time = intervals[i];
+        var tempIsochrones = [];
+        for(let generator of generators) {// generate the isochrones at time for all generators and store them so we can intersect
+            let isochrone = await generateIsochroneFromGenerator(generator,time);
+            collections[i].addOneFeature(isochrone);
+            tempIsochrones.push(isochrone);            
+        }
+        overlap = multipleIntersection(tempIsochrones);  
+        i++;    
+    }
+    if(overlap == null){
+        console.log("no overlap found within max");
+        return new Feature();
+    } else{
+        console.log("overlap: "+ overlap);
+        return overlap;
+    }  
 }
 function multipleIntersection(isochrones){
     var result = intersect(isochrones.pop(),isochrones.pop());
@@ -37,15 +57,17 @@ function multipleIntersection(isochrones){
         result = intersect(result,isochrones.pop());
     }
     if(result == null){
-        console.error("no intersection found")
+        console.log("no overlap found")
     }
     else{
+        console.log("there is a overlap")
         //do something with the result
         //question: do we want to return null if no intersection found? probobly right?
     }
+    return result;
 
 }
-*/
+
 
 async function findoptimum(location1, location2, max){
     var generator1 = makegenerator(location1);
@@ -54,35 +76,35 @@ async function findoptimum(location1, location2, max){
     var collection2 = new FeatureCollection();
 
     if (max < 5) {
-        console.error("max should be bigger than 5")// replace this with proper error handling
-    } else {
-       var intervals = generateIntervals(max);
-       console.log("intervals.length = " + intervals.length);
-       var i = 1;
-       var intersection = null;
-       while (i < intervals.length && intersection == null ){
-           var time = intervals[i];
-           console.log("time = "+ time);
-           var isochrone1 = await generateIsochroneFromGenerator(generator1,time);
-           var isochrone2 = await generateIsochroneFromGenerator(generator2,time);
-           collection1.addOneFeature(isochrone1);
-           collection2.addOneFeature(isochrone2);
-           intersection = intersect(isochrone1, isochrone2);
-           i++;
-        }
-        if( intersection != null){
-            console.log("start intersection");
-            console.log(intersection.geometry.coordinates);
-            console.log("end of intersection");
-            return intersection;
-        }
-        else{
-            //TODO: integrate this message in visuals
-            console.log("There is no place for you to meet within " + max +" minutes");
-            console.log(intersection);
-            return collection1;
-        }
-       }
+        console.log("max should be bigger than 5");// replace this with proper error handling
+        max = 5;
+    } 
+    var intervals = generateIntervals(max);
+    var i = 1;
+    var intersection = null;
+    while (i < intervals.length && intersection == null ){
+        var time = intervals[i];
+        console.log("time = "+ time);
+        var isochrone1 = await generateIsochroneFromGenerator(generator1,time);
+        var isochrone2 = await generateIsochroneFromGenerator(generator2,time);
+        collection1.addOneFeature(isochrone1);
+        collection2.addOneFeature(isochrone2);
+        intersection = intersect(isochrone1, isochrone2);
+        i++;
+    }
+    if( intersection != null){
+        console.log("start intersection");
+        console.log(intersection.geometry.coordinates);
+        console.log("end of intersection");
+        return intersection;
+    }
+    else{
+        //TODO: integrate this message in visuals
+        console.log("There is no place for you to meet within " + max +" minutes");
+        console.log(intersection);
+        return collection1;
+    }
+       
 }
 
 async function generateAllIsoChrones(location, max){
@@ -92,9 +114,7 @@ async function generateAllIsoChrones(location, max){
     for(let interval of intervals) {
         let isochrone = await generateIsochroneFromGenerator(generator,interval);
         collection.addOneFeature(isochrone);
-        console.log("time of isochrone: " + isochrone.properties.time);
     }
-    console.log("got out")
     return collection;
 }
 
@@ -147,14 +167,13 @@ function convertToPolygon(isochrone){
 
 function scaleTime(timeinminutes){
     // var sectomilli = 1000;
-    var sectomilli = 1000; // TODO: fake because car profile
+    var sectomilli = 100; // TODO: fake because car profile
     var mintosec = 60;
     return timeinminutes * sectomilli * mintosec;
 }
 
 async function run(){
-    var overlap = await findoptimum(bosa, herman, 5);
-    console.log("overlap: " + overlap.type);
+    var overlap = multipleOverlap([bosa, herman, KBC],5);
     return overlap;
 }
 
