@@ -32,13 +32,16 @@ async function multipleOverlap(locations,max){
     var intervals = generateIntervals(max);
     var i = 0;
     var overlap = null;
-    while(i < collections.length && overlap == null ){
+    while(i < intervals.length && overlap == null ){
         var time = intervals[i];
+        console.log("time: " + time);
         var tempIsochrones = [];
+        var j = 0;
         for(let generator of generators) {// generate the isochrones at time for all generators and store them so we can intersect
             let isochrone = await generateIsochroneFromGenerator(generator,time);
-            collections[i].addOneFeature(isochrone);
-            tempIsochrones.push(isochrone);            
+            collections[j].addOneFeature(isochrone);
+            tempIsochrones.push(isochrone);
+            j++;            
         }
         overlap = multipleIntersection(tempIsochrones);  
         i++;    
@@ -102,7 +105,7 @@ async function findoptimum(location1, location2, max){
         //TODO: integrate this message in visuals
         console.log("There is no place for you to meet within " + max +" minutes");
         console.log(intersection);
-        return collection1;
+        return new Feature();
     }
        
 }
@@ -165,15 +168,15 @@ function convertToPolygon(isochrone){
 
 }
 
-function scaleTime(timeinminutes){
+function scaleTime(timeInMinutes){
     // var sectomilli = 1000;
-    var sectomilli = 100; // TODO: fake because car profile
-    var mintosec = 60;
-    return timeinminutes * sectomilli * mintosec;
+    var secToMilli = 100; // TODO: fake because car profile
+    var minToSec = 60;
+    return timeInMinutes * secToMilli * minToSec;
 }
 
 async function run(){
-    var overlap = multipleOverlap([bosa, herman, KBC],5);
+    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],15);
     return overlap;
 }
 

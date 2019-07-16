@@ -25,7 +25,6 @@ export default class CustomMap extends Component {
 	}
 
     async componentDidMount() {
-        let overlap = await run();
         let pointSets = getAllPointSets();
         let polygons = [await run()];
         let points = [];
