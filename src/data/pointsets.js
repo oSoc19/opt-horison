@@ -21,8 +21,10 @@ class PointSet {
 
     
         for (let feature of polygons.features) {
-            let poly = polygon(feature.geometry.coordinates);
-            result.features = result.features.concat(pointsWithinPolygon(this.data, poly).features);
+            if(feature.geometry.coordinates.length >= 4){
+                let poly = polygon(feature.geometry.coordinates);
+                result.features = result.features.concat(pointsWithinPolygon(this.data, poly).features);
+            }
         }
         
 

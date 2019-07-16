@@ -1,5 +1,6 @@
 import Planner from 'plannerjs';
 import intersect from '@turf/intersect';
+import area from '@turf/area';
 import { Feature } from './Feature.js';
 import { FeatureCollection } from './FeatureCollection.js';
 
@@ -17,7 +18,7 @@ Gaucheret.longitude = 4.360043;
 Gaucheret.latitude = 50.864025;
 
 /** beginning of multiOverlap algorithms.*/
-async function multipleOverlap(locations,max){
+async function multipleOverlap(locations,max){    
     var generators =[];
     var collections = [];
     for(const loc of locations){
@@ -32,7 +33,7 @@ async function multipleOverlap(locations,max){
     var intervals = generateIntervals(max);
     var i = 0;
     var overlap = null;
-    while(i < intervals.length && overlap == null ){
+    while(i < intervals.length && checkOverlap(overlap)){
         var time = intervals[i];
         console.log("time: " + time);
         var tempIsochrones = [];
@@ -53,6 +54,16 @@ async function multipleOverlap(locations,max){
         console.log("overlap: "+ overlap);
         return overlap;
     }  
+}
+function checkOverlap(overlap){//checks if the overlap is null or smaller than the minimal area.
+    var minimalArea = 10000;//a bit smaller than two soccer fields.
+    if(overlap == null){
+        return true;
+    }else{
+        console.log("the area of the overlap is: " + area(overlap));
+        return (area(overlap) < minimalArea);
+    }
+
 }
 function multipleIntersection(isochrones){
     var result = intersect(isochrones.pop(),isochrones.pop());
@@ -122,6 +133,7 @@ async function generateAllIsoChrones(location, max){
 }
 
 function generateIntervals(max){
+    // do we want scaling like this or do we want fixed intervals, eventually dependent on user profile.
     let NbOfIsos = 5;
     let delta = max/NbOfIsos;
     let intervals = [];
@@ -176,7 +188,7 @@ function scaleTime(timeInMinutes){
 }
 
 async function run(){
-    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],15);
+    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],12);
     return overlap;
 }
 
