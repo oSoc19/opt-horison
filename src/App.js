@@ -5,14 +5,18 @@ import CustomMap from './components/CustomMap';
 import ExpandCollapseButton from './components/CustomSidebar/ExpandCollapseButton';
 
 import './App.css';
+import User from './models';
 
-const INITIAL_USER_LOCATION = [4.357028, 50.860708]; // lng - lat of BOSA
+//                             lng              - lat
+const INITIAL_USER_LOCATION = [4.356112791539232, 50.86078680502487];
+const BOSA_USER_LOCATION    = [4.356400088940063, 50.859772008199144]; 
+const HERMAN_USER_LOCATION  = [4.350017567235199, 50.86568777851741];
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
-    this.changeData = this.changeData.bind(this);
+    this.onParticipantsChange = this.onParticipantsChange.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
     this.handleHideClick = this.handleHideClick.bind(this);
     this.handleShowClick = this.handleShowClick.bind(this);
@@ -22,7 +26,11 @@ export default class App extends Component {
       mapCenter: INITIAL_USER_LOCATION,
       initialUserLocation: INITIAL_USER_LOCATION,
       visible: true,
-      data: []
+      participants: [
+        new User('Three', 5, ['walk'], INITIAL_USER_LOCATION, 'orange'),
+        new User('One', 15, ['walk'], BOSA_USER_LOCATION, '#ff0000'),
+        new User('Two', 20, ['walk'], HERMAN_USER_LOCATION, 'rgb(166, 33, 222)'),
+      ]
     };
   }
 
@@ -43,20 +51,21 @@ export default class App extends Component {
   }
 
   onDragEnd = ({lngLat}, guid) => {
-    const {data} = this.state;
-    const index = data.indexOf(data.find(p => p.guid === guid));
+    const {participants} = this.state;
+    const index = participants.indexOf(participants.find(p => p.guid === guid));
     if (index !== -1) {
-      data[index].location = [lngLat.lng, lngLat.lat];
-      this.changeData(data);
+      participants[index].location = [lngLat.lng, lngLat.lat];
+      this.onParticipantsChange(participants);
+      console.log(participants[index].location);
     }
   }
 
-  changeData = (data) => {
-    if (!Array.isArray(data)) {
-      console.error('Data is not an array!', data);
+  onParticipantsChange = (participants) => {
+    if (!Array.isArray(participants)) {
+      console.error('"Participants" variable is not an array!', participants);
       return;
     }
-    this.setState({data});
+    this.setState({participants});
   }
 
   handleHideClick = () => this.setState({ visible: false })
@@ -64,7 +73,7 @@ export default class App extends Component {
   handleSidebarHide = () => this.setState({ visible: false })
 
   render() {
-    const { visible, data, mapCenter, initialUserLocation } = this.state;
+    const { visible, participants, mapCenter, initialUserLocation } = this.state;
 
     return (
       <Sidebar.Pushable as={Segment}>
@@ -76,8 +85,8 @@ export default class App extends Component {
         </ExpandCollapseButton>
         
         <CustomSidebar 
-          data={data} 
-          changeData={this.changeData} 
+          participants={participants} 
+          onParticipantsChange={this.onParticipantsChange} 
           visible={visible} 
           onSidebarHide={this.handleSidebarHide}
           initialUserLocation={initialUserLocation}
@@ -86,7 +95,7 @@ export default class App extends Component {
         <Sidebar.Pusher>
           <CustomMap 
             center={mapCenter}
-            data={data}
+            participants={participants}
             onDragEnd={this.onDragEnd}
           />
         </Sidebar.Pusher>
