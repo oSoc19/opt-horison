@@ -18,7 +18,8 @@ Gaucheret.longitude = 4.360043;
 Gaucheret.latitude = 50.864025;
 
 /** beginning of multiOverlap algorithms.*/
-async function multipleOverlap(locations ,profiles ,max){    
+async function multipleOverlap(locations, profiles, maxes){   
+    //make generators 
     var generators =[];
     var collections = [];
     var profileIndex = 0;
@@ -27,22 +28,25 @@ async function multipleOverlap(locations ,profiles ,max){
         generator.setProfileID(profiles[profileIndex]);
         console.log("set profile to: "+ profiles[profileIndex]);
         generators.push(generator);
-        collections.push(new FeatureCollection()); 
+        collections.push(new FeatureCollection());
         profileIndex++;      
     }
-    if(max < 5){
-        max = 5;
-        console.log("max should be bigger than 5");// replace this of force minimum of 5
+    // generate intervals
+    var maximums = adjustMax(maxes);
+    var intervalArray = [];
+    for(const maximum of maximums){
+        var intervals = generateIntervals(maximum);
+        intervalArray.push(intervals);
     }
-    var intervals = generateIntervals(max);
+    // generate isochrones+overlap
     var i = 0;
     var overlap = null;
-    while(i < intervals.length && checkOverlap(overlap)){
-        var time = intervals[i];
-        console.log("time: " + time);
+    while(i < intervalArray[0].length && checkOverlap(overlap)){        
         var tempIsochrones = [];
         var j = 0;
         for(let generator of generators) {// generate the isochrones at time for all generators and store them so we can intersect
+            var time = intervalArray[j][i];
+            console.log("time: " + time);
             let isochrone = await generateIsochroneFromGenerator(generator,time);
             collections[j].addOneFeature(isochrone);
             tempIsochrones.push(isochrone);
@@ -58,6 +62,15 @@ async function multipleOverlap(locations ,profiles ,max){
         console.log("overlap: "+ overlap);
         return overlap;
     }  
+}
+function adjustMax(maxes){
+    for(let i =0; i < maxes.length; i++){
+        if(maxes[i] < 5){
+            console.log("The maximum should at least me 5");
+            maxes[i] = 5;
+        }
+    }
+    return maxes
 }
 function checkOverlap(overlap){//checks if the overlap is null or smaller than the minimal area.
     var minimalArea = 10000;//a bit smaller than two soccer fields.
@@ -192,7 +205,7 @@ function scaleTime(timeInMinutes){
 }
 
 async function run(){
-    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],AllCars,20);
+    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],AllCars,[0,10,12,20]);
     return overlap;
 }
 
