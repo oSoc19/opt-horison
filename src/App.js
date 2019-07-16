@@ -45,7 +45,7 @@ export default class App extends Component {
   onDragEnd = ({lngLat}, guid) => {
     const {data} = this.state;
     const index = data.indexOf(data.find(p => p.guid === guid));
-    if (index && index !== -1) {
+    if (index !== -1) {
       data[index].location = [lngLat.lng, lngLat.lat];
       this.setState({data});
     }
