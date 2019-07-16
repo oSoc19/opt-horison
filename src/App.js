@@ -47,7 +47,7 @@ export default class App extends Component {
     const index = data.indexOf(data.find(p => p.guid === guid));
     if (index !== -1) {
       data[index].location = [lngLat.lng, lngLat.lat];
-      this.setState({data});
+      this.changeData(data);
     }
   }
 
@@ -56,7 +56,6 @@ export default class App extends Component {
       console.error('Data is not an array!', data);
       return;
     }
-    console.log(data);
     this.setState({data});
   }
 
