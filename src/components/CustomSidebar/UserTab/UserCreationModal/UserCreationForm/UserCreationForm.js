@@ -16,20 +16,30 @@ export default class UserCreationForm extends Component {
 			name: '',
 			duration: '',
 			mode: ['walking'],
+			color: '#FFA500',
 			agreement: false,
 
 			nameError: false,
 			durationError: false,
 			modeError: false,
+			colorError: false,
 			agreementError: false,
 			formError: false
 		};
 	}
 	
+	isColor = (strColor) => {
+		var s = new Option().style;
+		s.color = strColor;
+
+		// return 'false' if color wasn't assigned
+		return s.color == strColor.toLowerCase();
+	}
+
 	onSubmit (e) {
 		e.preventDefault();
 		let error = false;
-		const {name, duration, mode, agreement } = this.state;
+		const {name, duration, mode, color, agreement } = this.state;
 
 		if (name === '') {
 			this.setState({nameError: true});
@@ -52,6 +62,12 @@ export default class UserCreationForm extends Component {
 			this.setState({modeError: false});
 		}
 
+		if (!color || color.length === 0 || !this.isColor(color)) {
+			this.setState({colorError: true});
+		} else {
+			this.setState({colorError: false});
+		}
+
 		if (!agreement) {
 			this.setState({agreementError: true});
 			error = true;
@@ -65,7 +81,7 @@ export default class UserCreationForm extends Component {
 		}
 		this.setState({formError: false});
 			
-		this.props.addParticipant(new User(name, duration, mode, this.props.initialUserLocation));
+		this.props.addParticipant(new User(name, duration, mode, this.props.initialUserLocation, color));
 	}
 
 	onChange (e, {name, value}) {
@@ -91,8 +107,8 @@ export default class UserCreationForm extends Component {
 	}
 
 	render() {
-		let { name, duration, mode, agreement,
-			nameError, durationError, modeError, agreementError, formError
+		let { name, duration, mode, color, agreement,
+			nameError, durationError, modeError, colorError, agreementError, formError
 		} = this.state;
 
 		return (
@@ -166,6 +182,18 @@ export default class UserCreationForm extends Component {
 						label='Bike'
 						onChange={this.onChange}
 						error={modeError}
+					/>
+				</Form.Group>
+				<Form.Group inline>
+					<Form.Input
+						name='color'
+						id='color'
+						type='color'
+						value={color}
+						label='Marker color'
+						onChange={this.onChange}
+						error={colorError}
+						input={{style: {height: '38px', width: '35px', padding: '5px'}}}
 					/>
 				</Form.Group>
 				

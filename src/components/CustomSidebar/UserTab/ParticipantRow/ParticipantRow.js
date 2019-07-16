@@ -6,12 +6,12 @@ import './ParticipantRow.css';
 
 export default class ParticipantRow extends Component {
 	render() {
-		const { guid, name, duration, mode } = this.props;
+		const { guid, name, duration, mode, color } = this.props;
 		return (
 			<Table.Row>
 				<Table.Cell>
 					<Header>
-						<Icon name='user circle' size='small'/>
+						<Icon name='user circle' size='small' style={{color}}/>
 						<Header.Content>{name}</Header.Content>
 					</Header>
 				</Table.Cell>
