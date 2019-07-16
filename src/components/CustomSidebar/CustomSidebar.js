@@ -27,7 +27,11 @@ export default class CustomSidebar extends Component {
                 },
                 pane: {
                     key: 'usersPane',
-                    content: (<UserTab initialUserLocation={this.props.initialUserLocation} changeData={this.props.changeData} data={this.props.data}></UserTab>)
+                    content: (<UserTab 
+                        initialUserLocation={this.props.initialUserLocation} 
+                        onParticipantsChange={this.props.onParticipantsChange} 
+                        participants={this.props.participants}
+                    />)
                 }
             },
             { 
@@ -37,7 +41,7 @@ export default class CustomSidebar extends Component {
                 },
                 pane: {
                     key: 'locationsPane',
-                    content: (<POITab></POITab>)
+                    content: (<POITab/>)
                 }
             }
         ];
