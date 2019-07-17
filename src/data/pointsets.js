@@ -19,13 +19,14 @@ class PointSet {
             features: []
         };
 
-        // Check if we're actually dealing with a polygon.
-        if (polygons.features.length >= 4) {
-            for (let feature of polygons.features) {
+    
+        for (let feature of polygons.features) {
+            if(feature.geometry.coordinates.length >= 4){
                 let poly = polygon(feature.geometry.coordinates);
                 result.features = result.features.concat(pointsWithinPolygon(this.data, poly).features);
             }
         }
+        
 
         return result;
     }
