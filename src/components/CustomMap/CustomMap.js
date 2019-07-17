@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import { getAllPointSets } from '../../data/pointsets.js';
-import PoiLayer from '../PoiLayer/PoiLayer.js';
-import IsochroneLayer from '../IsochroneLayer/IsochroneLayer.js';
+import PoiLayer from './PoiLayer/PoiLayer.js';
+import IsochroneLayer from './IsochroneLayer/IsochroneLayer.js';
 import { findoptimum, run, intersect } from '../../iso/isochrone.js';
 
 import './CustomMap.css';
@@ -45,9 +45,14 @@ export default class CustomMap extends Component {
         this.setState({ points });
     }
 
+    //TODO: refactor so it runs everytime you add/remove a user
     async componentDidMount() {
+        this.props.onLoadingStart();
+
         await this.setPolygons();
         this.setPoints();
+
+        this.props.onLoadingEnd();
     }
 
 	render() {
