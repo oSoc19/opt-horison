@@ -8,6 +8,7 @@ import './CustomSidebar.css';
 export default class CustomSidebar extends Component {
     constructor(props) {
         super(props);
+
         this.onHide = this.onHide.bind(this);
     }
 
@@ -36,7 +37,12 @@ export default class CustomSidebar extends Component {
                 },
                 pane: {
                     key: 'locationsPane',
-                    content: (<POITab></POITab>)
+                    content: (
+                        <POITab
+                            pointSets={this.props.pointSets}
+                            togglePointSet={this.props.togglePointSet}>
+                        </POITab>
+                    )
                 }
             }
         ];
