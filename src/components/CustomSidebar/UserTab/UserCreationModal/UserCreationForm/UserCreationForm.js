@@ -33,7 +33,7 @@ export default class UserCreationForm extends Component {
 		s.color = strColor;
 
 		// return 'false' if color wasn't assigned
-		return s.color == strColor.toLowerCase();
+		return s.color === strColor.toLowerCase();
 	}
 
 	onSubmit (e) {
@@ -210,7 +210,7 @@ export default class UserCreationForm extends Component {
 					fluid 
 					type='submit' 
 					color='blue'
-					disabled={!name || !duration || !mode || !agreement}
+					disabled={!name || !duration || !modes || !agreement}
 				/>
 			</Form>
 		);
