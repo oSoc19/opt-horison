@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { Table, Button, Transition } from 'semantic-ui-react';
 import _ from 'lodash';
-import User from '../../../models';
 import ParticipantRow from './ParticipantRow';
 import UserCreationModal from './UserCreationModal/UserCreationModal';
 
@@ -21,42 +20,39 @@ export default class UserTab extends Component {
 		this.state = {
 			modalOpen: false,
 			column: null,
-			data: [new User('Tinaël', 15, 'car')],
 			direction: null
 		};
 	}
 
 	handleSort = (clickedColumn) => {
-		const { column, data, direction } = this.state;
+		const { data } = this.props;
+		const { column, direction } = this.state;
 	
 		if (column !== clickedColumn) {
 		  this.setState({
 			column: clickedColumn,
-			data: _.sortBy(data, [clickedColumn]),
 			direction: 'ascending'
 		  });
+		  this.props.changeData(_.sortBy(this.props.data, [clickedColumn]));
 	
 		  return;
 		}
 	
 		this.setState({
-		  data: data.reverse(),
 		  direction: direction === 'ascending' ? 'descending' : 'ascending',
 		});
+		this.props.changeData(data.reverse());
 	}
 
 	handleAdd = (participant) => {
-		const {data} = this.state;
-
-		console.log(participant);
+		const { data } = this.props;
 		data.push(participant);
-
-		this.setState({data});
+		this.props.changeData(data);
 		this.onModalClose();
 	}
 
 	handleRemove = (guid) => {
-		let { data } = this.state;
+		const { data } = this.props;
 
 		let deletedRow = data.find(p => p.guid === guid);
 		if (deletedRow) {
@@ -65,7 +61,7 @@ export default class UserTab extends Component {
 			console.error('Deleting an undisplayed row is impossible!', deletedRow);
 		}
 
-		this.setState({data});
+		this.props.changeData(data);
 	}
 
 	showModal = () => {
@@ -77,11 +73,12 @@ export default class UserTab extends Component {
 	}
 
 	render() {
-		const { column, data, direction } = this.state;
+		const { column, direction } = this.state;
 
 		return (
 			<div>
-				<UserCreationModal 
+				<UserCreationModal
+					initialUserLocation={this.props.initialUserLocation}
 					modalOpen={this.state.modalOpen} 
 					closeModal={this.onModalClose} 
 					addParticipant={this.handleAdd} 
@@ -114,7 +111,7 @@ export default class UserTab extends Component {
 						as={Table.Body}
 						duration={500}
 					>
-						{_.map(data,
+						{_.map(this.props.data,
 							(participant) => 
 							<ParticipantRow
 								key={participant.guid}

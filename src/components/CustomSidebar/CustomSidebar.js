@@ -8,6 +8,7 @@ import './CustomSidebar.css';
 export default class CustomSidebar extends Component {
     constructor(props) {
         super(props);
+
         this.onHide = this.onHide.bind(this);
     }
 
@@ -26,7 +27,7 @@ export default class CustomSidebar extends Component {
                 },
                 pane: {
                     key: 'usersPane',
-                    content: (<UserTab></UserTab>)
+                    content: (<UserTab initialUserLocation={this.props.initialUserLocation} changeData={this.props.changeData} data={this.props.data}></UserTab>)
                 }
             },
             { 
