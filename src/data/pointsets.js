@@ -7,10 +7,13 @@ import coffeeData from './json/cafes.json'
 import restoData from './json/restos.json'
 
 class PointSet {
-    constructor(name, data, image) {
-        this.name = name;
-        this.image = image;
-        this.data = data;
+    constructor(config) {
+        this.name = config.name;
+        this.data = config.data;
+        this.mapboxIcon = config.mapboxIcon;
+        this.semanticIcon = config.semanticIcon;
+        this.description = config.description;
+        this.active = config.active;
     }
 
     intersect(polygons) {
@@ -19,14 +22,15 @@ class PointSet {
             features: []
         };
 
-    
         for (let feature of polygons.features) {
-            if(feature.geometry.coordinates.length >= 4){
-                let poly = polygon(feature.geometry.coordinates);
-                result.features = result.features.concat(pointsWithinPolygon(this.data, poly).features);
+            for (let ring of feature.geometry.coordinates) {
+                if (ring.length >= 4) {
+                    let poly = polygon(feature.geometry.coordinates);
+                    result.features = result.features.concat(
+                        pointsWithinPolygon(this.data, poly).features);
+                }
             }
         }
-        
 
         return result;
     }
@@ -34,9 +38,30 @@ class PointSet {
 
 function getAllPointSets() {
     return [
-        new PointSet("Bar", barData, "bar"),
-        new PointSet("Coffee", coffeeData, "cafe"),
-        new PointSet("Restaurant", restoData, "restaurant"),
+        new PointSet({
+            name: "Bar",
+            description: "An establishment that sells alcoholic drinks.",
+            active: false,
+            data: barData,
+            mapboxIcon: "bar",
+            semanticIcon: "glass martini"
+        }),
+        new PointSet({
+            name: "Coffee",
+            description: "An establishment selling beverages and snacks.",
+            active: true,
+            data: coffeeData,
+            mapboxIcon: "cafe",
+            semanticIcon: "coffee"
+        }),
+        new PointSet({
+            name: "Restaurant",
+            description: "An establishment selling full meals.",
+            active: true,
+            data: restoData,
+            mapboxIcon: "restaurant",
+            semanticIcon: "food"
+        })
     ];
 }
 
