@@ -7,10 +7,6 @@ class PoiLayer extends Component {
         points: []
     }
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             this.props.points.map(collection =>

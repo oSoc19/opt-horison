@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import { getAllPointSets } from '../../data/pointsets.js';
-import PoiLayer from '../PoiLayer/PoiLayer.js';
-import IsochroneLayer from '../IsochroneLayer/IsochroneLayer.js';
+import PoiLayer from './PoiLayer/PoiLayer.js';
+import IsochroneLayer from './IsochroneLayer/IsochroneLayer.js';
 import { findoptimum, run, intersect } from '../../iso/isochrone.js';
 
 import './CustomMap.css';
@@ -45,43 +45,49 @@ export default class CustomMap extends Component {
         this.setState({ points });
     }
 
+    //TODO: refactor so it runs everytime you add/remove a user
     async componentDidMount() {
+        this.props.onLoadingStart();
+
         await this.setPolygons();
         this.setPoints();
+
+        this.props.onLoadingEnd();
     }
 
 	render() {
-        const {center, data} = this.props;
+        const {center, participants} = this.props;
+        const {containerStyle, polygons, points} = this.state;
 		return (
 			<Map // eslint-disable-next-line
                 style='mapbox://styles/timutable/cjy0gxsnt01bc1crzdsrye0m5'
 				className='CustomMap'
-				containerStyle={this.state.containerStyle}
+				containerStyle={containerStyle}
                 center={center}
-                zoom={[13]}
             >
-                <IsochroneLayer polygons={this.state.polygons} />
-                <PoiLayer polygons={this.state.polygons} points={this.state.points} />
+                <IsochroneLayer polygons={polygons} />
+                <PoiLayer polygons={polygons} points={points} />
+                {participants.map((participant, index) => (
                 <Layer
                     type="circle"
-                    id="participant-marker"
+                    id={`${participant.guid}-marker${index}`}
+                    key={`${participant.guid}-marker${index}`}
                     paint={{
                         'circle-stroke-width': 4,
                         'circle-radius': 10,
                         'circle-blur': 0.15,
-                        'circle-color': '#3770C6',
-                        'circle-stroke-color': 'white'
+                        'circle-color': participant.color,
+                        'circle-stroke-color': '#000000'
                     }}
                 >
-                    {data.map(participant => (
                     <Feature
                         key={participant.guid}
                         coordinates={participant.location}
                         draggable
                         onDragEnd={evt => this.props.onDragEnd(evt, participant.guid)}
-                    />
-                    ))}
+                    /> 
                 </Layer>
+                ))}
 			</Map>
 		);
 	}
