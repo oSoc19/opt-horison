@@ -3,6 +3,7 @@ import { Sidebar, Segment } from 'semantic-ui-react';
 import CustomSidebar from './components/CustomSidebar';
 import CustomMap from './components/CustomMap';
 import ExpandCollapseButton from './components/CustomSidebar/ExpandCollapseButton';
+import { getAllPointSets } from './data/pointsets.js';
 
 import './App.css';
 import User from './models';
@@ -21,6 +22,7 @@ export default class App extends Component {
     this.handleHideClick = this.handleHideClick.bind(this);
     this.handleShowClick = this.handleShowClick.bind(this);
     this.handleSidebarHide = this.handleSidebarHide.bind(this);
+    this.togglePointSet = this.togglePointSet.bind(this);
 
     this.state = { 
       mapCenter: INITIAL_USER_LOCATION,
@@ -31,8 +33,11 @@ export default class App extends Component {
         new User('Two', 20, ['walk'], HERMAN_USER_LOCATION, 'rgb(166, 33, 222)'),
         new User('Three', 25, ['walk', 'car'], INITIAL_USER_LOCATION, 'orange')
       ],
-      loading: false
+      loading: false,
+      points: getAllPointSets(),
+      shouldUpdate: false,
     };
+    this.mapRef = React.createRef();
   }
 
   componentWillMount = () => {
@@ -74,16 +79,27 @@ export default class App extends Component {
   handleShowClick = () => this.setState({ visible: true })
   handleSidebarHide = () => this.setState({ visible: false })
 
+  togglePointSet(pointSetName) {
+      return e => {
+          const points = [ ...this.state.points ];
+          const pointSet = points.find(ps => ps.name === pointSetName);
+          pointSet.active = !pointSet.active;
+          this.setState({ points });
+          setTimeout(() => {
+            this.mapRef.current.setPoints()
+          }, 50);
+      };
+  }
+
   render() {
     const { visible, participants, mapCenter, initialUserLocation, loading } = this.state;
 
     return (
       <Sidebar.Pushable as={Segment}>
         <ExpandCollapseButton
-          visible={visible}
-          onHideClick={this.handleHideClick} 
-          onShowClick={this.handleShowClick} 
-        >
+          visible={this.state.visible}
+          onHideClick={this.handleHideClick}
+          onShowClick={this.handleShowClick}>
         </ExpandCollapseButton>
         
         <CustomSidebar 
@@ -92,14 +108,18 @@ export default class App extends Component {
           visible={visible} 
           onSidebarHide={this.handleSidebarHide}
           initialUserLocation={initialUserLocation}
+          pointSets={this.state.points}
+          togglePointSet={this.togglePointSet}
         />
-        
+    
         <Sidebar.Pusher>
           <Segment loading={loading}>
             <CustomMap 
               center={mapCenter}
               participants={participants}
               onDragEnd={this.onDragEnd}
+              ref={this.mapRef}
+              pointSets={this.state.points.filter(ps => ps.active)}
             />
           </Segment>
         </Sidebar.Pusher>

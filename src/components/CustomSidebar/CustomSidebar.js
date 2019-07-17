@@ -41,7 +41,10 @@ export default class CustomSidebar extends Component {
                 },
                 pane: {
                     key: 'locationsPane',
-                    content: (<POITab/>)
+                    content: (<POITab
+                        pointSets={this.props.pointSets}
+                        togglePointSet={this.props.togglePointSet}
+                    />)
                 }
             }
         ];

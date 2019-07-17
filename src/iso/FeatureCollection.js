@@ -15,6 +15,9 @@ class FeatureCollection {
         var feature = new Feature(polygonData,timeinmillisec);
         this.features.push(feature);
     }
+    isempty(){
+        return this.features.length == 0;
+    }
 
 }
 

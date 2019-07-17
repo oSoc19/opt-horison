@@ -22,40 +22,34 @@ export default class CustomMap extends Component {
         };
 	}
 
-    async componentDidMount() {
-        let overlap = await run();
-        let pointSets = getAllPointSets();
+    async setPolygons() {
         let polygons = [await run()];
+        this.setState({ polygons });
+    }
+
+    setPoints() {
+        let pointSets = this.props.pointSets;
         let points = [];
-
-        // console.log(overlap);
-
-        /* for (let coordinateList of overlap.geometry.coordinates) {
-            polygons.push({
-                type: "Feature",
-                properties: {},
-                geometry: {
-                    type: "Polygon",
-                    coordinates: coordinateList
-                }
-            });
-        }*/
-
-        console.log("POLYGONS: ", polygons);
 
         for (let pointSet of pointSets) {
             let intersectingPoints = pointSet.intersect({
                 type: "FeatureCollection",
-                features: polygons
+                features: this.state.polygons
             });
-            intersectingPoints.image = pointSet.image;
+
+            intersectingPoints.image = pointSet.mapboxIcon;
             intersectingPoints.name = pointSet.name
             points.push(intersectingPoints);
         }
 
-        this.setState({ polygons, points });
+        this.setState({ points });
     }
- 
+
+    async componentDidMount() {
+        await this.setPolygons();
+        this.setPoints();
+    }
+
 	render() {
         const {center, participants} = this.props;
         const {containerStyle, polygons, points} = this.state;
