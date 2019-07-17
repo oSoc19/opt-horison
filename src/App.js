@@ -8,10 +8,12 @@ import { getAllPointSets } from './data/pointsets.js';
 import './App.css';
 import User from './models';
 
-//                             lng              - lat
-const INITIAL_USER_LOCATION = [4.356112791539232, 50.86078680502487];
-const BOSA_USER_LOCATION    = [4.356400088940063, 50.859772008199144]; 
-const HERMAN_USER_LOCATION  = [4.350017567235199, 50.86568777851741];
+//                               lng              - lat
+const INITIAL_USER_LOCATION   = [4.356112, 50.860786];
+const BOSA_USER_LOCATION      = [4.356400, 50.859772]; 
+const HERMAN_USER_LOCATION    = [4.350017, 50.865687];
+const KBC_USER_LOCATION       = [4.346777, 50.860929];
+const GAUCHERET_USER_LOCATION = [4.360043, 50.864025];
 
 export default class App extends Component {
   constructor(props) {
@@ -29,9 +31,10 @@ export default class App extends Component {
       initialUserLocation: INITIAL_USER_LOCATION,
       visible: true,
       participants: [
-        new User('One', 15, ['walk'], BOSA_USER_LOCATION, '#ff0000'),
-        new User('Two', 20, ['walk'], HERMAN_USER_LOCATION, 'rgb(166, 33, 222)'),
-        new User('Three', 25, ['walk', 'car'], INITIAL_USER_LOCATION, 'orange')
+        new User('Pieter', 10, 'walk', GAUCHERET_USER_LOCATION, 'orange'),
+        new User('Tim', 15, 'walk', BOSA_USER_LOCATION, 'green'),
+        new User('Bert', 20, 'walk', HERMAN_USER_LOCATION, 'red'),
+        new User('Tinaël', 25, 'walk', KBC_USER_LOCATION, 'blue')
       ],
       loading: false,
       points: getAllPointSets(),
@@ -91,6 +94,10 @@ export default class App extends Component {
       };
   }
 
+  onLoadingStart = () => this.setState({loading: true});
+
+  onLoadingEnd = () => this.setState({loading:false});
+
   render() {
     const { visible, participants, mapCenter, initialUserLocation, loading } = this.state;
 
@@ -114,7 +121,9 @@ export default class App extends Component {
     
         <Sidebar.Pusher>
           <Segment loading={loading}>
-            <CustomMap 
+            <CustomMap
+              onLoadingStart={this.onLoadingStart}
+              onLoadingEnd={this.onLoadingEnd}
               center={mapCenter}
               participants={participants}
               onDragEnd={this.onDragEnd}
