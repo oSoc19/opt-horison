@@ -1,8 +1,10 @@
 import Planner from 'plannerjs';
 import intersect from '@turf/intersect';
 import area from '@turf/area';
+import centerOfMass from '@turf/center-of-mass';
 import { Feature } from './Feature.js';
 import { FeatureCollection } from './FeatureCollection.js';
+import {ResultContainer} from '../models/ResultContainer.js';
 
 let bosa = {};
 let herman = {};
@@ -25,19 +27,16 @@ async function multipleOverlap(locations, profiles, maxes){
     var profileIndex = 0;
     for(const loc of locations){
         var generator =  makegenerator(loc); 
-        generator.setProfileID(profiles[profileIndex]);
+        await generator.setProfileID(profiles[profileIndex]);
         console.log("set profile to: "+ profiles[profileIndex]);
+        console.log(generator);
         generators.push(generator);
         collections.push(new FeatureCollection());
         profileIndex++;      
     }
+    console.log("generators: ",generators);
     // generate intervals
-    var maximums = adjustMax(maxes);
-    var intervalArray = [];
-    for(const maximum of maximums){
-        var intervals = generateIntervals(maximum);
-        intervalArray.push(intervals);
-    }
+    var intervalArray = generateIntervalArray(maxes);
     // generate isochrones+overlap
     var i = 0;
     var overlap = null;
@@ -57,11 +56,24 @@ async function multipleOverlap(locations, profiles, maxes){
     }
     if(overlap == null){
         console.log("no overlap found within max");
-        return new Feature();
+        var resultingOverlap = new Feature();
+        var center = null;
     } else{
         console.log("overlap: "+ overlap);
-        return overlap;
+        var reslutingOverlap = overlap;
+        var center = centerOfMass(overlap);
+        console.log("center:",center);
     }  
+    return new ResultContainer(resultingOverlap,collections,center);
+}
+function generateIntervalArray(maxes){
+    var maximums = adjustMax(maxes);
+    var result = [];
+    for(const maximum of maximums){
+        var intervals = generateIntervals(maximum);
+        result.push(intervals);
+    }
+    return result;
 }
 function adjustMax(maxes){
     for(let i =0; i < maxes.length; i++){
@@ -199,13 +211,13 @@ function convertToPolygon(isochrone){
 
 function scaleTime(timeInMinutes){
     // var sectomilli = 1000;
-    var secToMilli = 100; // TODO: fake because car profile
+    var secToMilli = 1000; // TODO: fake because car profile
     var minToSec = 60;
     return timeInMinutes * secToMilli * minToSec;
 }
 
 async function run(){
-    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],AllPedestrians,[10,10,10,10]);
+    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],CarsAndPedestrians,[10,10,10,10]);
     return overlap;
 }
 
