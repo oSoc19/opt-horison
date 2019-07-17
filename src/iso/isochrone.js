@@ -32,12 +32,7 @@ async function multipleOverlap(locations, profiles, maxes){
         profileIndex++;      
     }
     // generate intervals
-    var maximums = adjustMax(maxes);
-    var intervalArray = [];
-    for(const maximum of maximums){
-        var intervals = generateIntervals(maximum);
-        intervalArray.push(intervals);
-    }
+    var intervalArray = generateIntervalArray(maxes);
     // generate isochrones+overlap
     var i = 0;
     var overlap = null;
@@ -62,6 +57,15 @@ async function multipleOverlap(locations, profiles, maxes){
         console.log("overlap: "+ overlap);
         return overlap;
     }  
+}
+function generateIntervalArray(maxes){
+    maximums = adjustMax(maxes);
+    var result = [];
+    for(const maximum of maximums){
+        var intervals = generateIntervals(maximum);
+        result.push(intervals);
+    }
+    return result;
 }
 function adjustMax(maxes){
     for(let i =0; i < maxes.length; i++){
