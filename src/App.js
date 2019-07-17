@@ -7,10 +7,14 @@ import { getAllPointSets } from './data/pointsets.js';
 
 import './App.css';
 
+const INITIAL_USER_LOCATION = [4.357028, 50.860708]; // lng - lat of BOSA
+
 export default class App extends Component {
   constructor(props) {
     super(props);
 
+    this.changeData = this.changeData.bind(this);
+    this.onDragEnd = this.onDragEnd.bind(this);
     this.handleHideClick = this.handleHideClick.bind(this);
     this.handleShowClick = this.handleShowClick.bind(this);
     this.handleSidebarHide = this.handleSidebarHide.bind(this);
@@ -22,7 +26,45 @@ export default class App extends Component {
         visible: true,
         points: getAllPointSets(),
         shouldUpdate: false,
+        mapCenter: INITIAL_USER_LOCATION,
+        initialUserLocation: INITIAL_USER_LOCATION,
+        visible: true,
+        data: []
     };
+  }
+
+  componentWillMount = () => {
+    navigator.geolocation.getCurrentPosition(
+      ({coords}) => {
+        const { latitude, longitude } = coords;
+
+        this.setState({
+          mapCenter: [longitude, latitude],
+          initialUserLocation : [longitude, latitude]
+        });
+      },
+      err => {
+        console.error('Cannot retrieve your current position', err);
+      }
+    );
+  }
+
+  onDragEnd = ({lngLat}, guid) => {
+    const {data} = this.state;
+    const index = data.indexOf(data.find(p => p.guid === guid));
+    if (index !== -1) {
+      data[index].location = [lngLat.lng, lngLat.lat];
+      this.setState({data});
+    }
+  }
+
+  changeData = (data) => {
+    if (!Array.isArray(data)) {
+      console.error('Data is not an array!', data);
+      return;
+    }
+    console.log(data);
+    this.setState({data});
   }
 
   handleHideClick = () => this.setState({ visible: false })
@@ -42,6 +84,8 @@ export default class App extends Component {
   }
 
   render() {
+    const { visible, data, mapCenter, initialUserLocation } = this.state;
+
     return (
       <Sidebar.Pushable as={Segment}>
         <ExpandCollapseButton
@@ -51,17 +95,21 @@ export default class App extends Component {
         </ExpandCollapseButton>
 
         <CustomSidebar
+            data={data}
+            changeData={this.changeData} 
             pointSets={this.state.points}
+            visible={visible}
             togglePointSet={this.togglePointSet}
-            visible={this.state.visible}
-            onSidebarHide={this.handleSidebarHide}>
-        </CustomSidebar>
+            onSidebarHide={this.handleSidebarHide}
+            initialUserLocation={initialUserLocation} />
 
         <Sidebar.Pusher>
           <CustomMap
             ref={this.mapRef}
-            center={[4.352440, 50.846480]}
+            center={mapCenter}
+            data={data}
             pointSets={this.state.points.filter(ps => ps.active)}>
+            onDragEnd={this.onDragEnd}
           </CustomMap>
         </Sidebar.Pusher>
       </Sidebar.Pushable>

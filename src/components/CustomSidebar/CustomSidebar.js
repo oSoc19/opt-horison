@@ -27,7 +27,7 @@ export default class CustomSidebar extends Component {
                 },
                 pane: {
                     key: 'usersPane',
-                    content: (<UserTab></UserTab>)
+                    content: (<UserTab initialUserLocation={this.props.initialUserLocation} changeData={this.props.changeData} data={this.props.data}></UserTab>)
                 }
             },
             { 

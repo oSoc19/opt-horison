@@ -22,7 +22,6 @@ class PointSet {
             features: []
         };
 
-        // Check if we're actually dealing with a polygon.
         for (let feature of polygons.features) {
             for (let ring of feature.geometry.coordinates) {
                 if (ring.length >= 4) {
