@@ -27,10 +27,11 @@ export default class App extends Component {
       initialUserLocation: INITIAL_USER_LOCATION,
       visible: true,
       participants: [
-        new User('Three', 5, ['walk'], INITIAL_USER_LOCATION, 'orange'),
         new User('One', 15, ['walk'], BOSA_USER_LOCATION, '#ff0000'),
         new User('Two', 20, ['walk'], HERMAN_USER_LOCATION, 'rgb(166, 33, 222)'),
-      ]
+        new User('Three', 25, ['walk', 'car'], INITIAL_USER_LOCATION, 'orange')
+      ],
+      loading: false
     };
   }
 
@@ -65,6 +66,7 @@ export default class App extends Component {
       console.error('"Participants" variable is not an array!', participants);
       return;
     }
+    //TODO: check that participants is an array of User()
     this.setState({participants});
   }
 
@@ -73,7 +75,7 @@ export default class App extends Component {
   handleSidebarHide = () => this.setState({ visible: false })
 
   render() {
-    const { visible, participants, mapCenter, initialUserLocation } = this.state;
+    const { visible, participants, mapCenter, initialUserLocation, loading } = this.state;
 
     return (
       <Sidebar.Pushable as={Segment}>
@@ -93,11 +95,13 @@ export default class App extends Component {
         />
         
         <Sidebar.Pusher>
-          <CustomMap 
-            center={mapCenter}
-            participants={participants}
-            onDragEnd={this.onDragEnd}
-          />
+          <Segment loading={loading}>
+            <CustomMap 
+              center={mapCenter}
+              participants={participants}
+              onDragEnd={this.onDragEnd}
+            />
+          </Segment>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     );
