@@ -15,7 +15,7 @@ class IsochroneLayer extends Component {
                     features: this.props.polygons
                 }}
                 linePaint={{
-                    'line-color': 'red',
+                    'line-color': '#008080',
                     'line-width': 5
                 }} />
         );
