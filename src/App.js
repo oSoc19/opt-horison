@@ -6,7 +6,7 @@ import ExpandCollapseButton from './components/CustomSidebar/ExpandCollapseButto
 import { getAllPointSets } from './data/pointsets.js';
 
 import './App.css';
-import User from './models';
+import User from './models/User.js';
 
 //                               lng              - lat
 const INITIAL_USER_LOCATION   = [4.356112, 50.860786];
@@ -88,9 +88,7 @@ export default class App extends Component {
           const pointSet = points.find(ps => ps.name === pointSetName);
           pointSet.active = !pointSet.active;
           this.setState({ points });
-          setTimeout(() => {
-            this.mapRef.current.setPoints()
-          }, 50);
+          this.mapRef.current.setPoints()
       };
   }
 

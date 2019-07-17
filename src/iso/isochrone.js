@@ -54,16 +54,18 @@ async function multipleOverlap(locations, profiles, maxes){
         overlap = multipleIntersection(tempIsochrones);  
         i++;    
     }
+    var resultingOverlap = new Feature();
+    var center = null;
+
     if(overlap == null){
         console.log("no overlap found within max");
-        var resultingOverlap = new Feature();
-        var center = null;
     } else{
         console.log("overlap: "+ overlap);
-        var reslutingOverlap = overlap;
-        var center = centerOfMass(overlap);
+        resultingOverlap = overlap;
+        center = centerOfMass(overlap);
         console.log("center:",center);
-    }  
+    }
+
     return new ResultContainer(resultingOverlap,collections,center);
 }
 function generateIntervalArray(maxes){
