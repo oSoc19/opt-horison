@@ -205,7 +205,7 @@ function scaleTime(timeInMinutes){
 }
 
 async function run(){
-    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],AllCars,[0,10,12,20]);
+    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],AllPedestrians,[10,10,10,10]);
     return overlap;
 }
 
