@@ -20,10 +20,9 @@ export default class ParticipantRow extends Component {
 				</Table.Cell>
 				<Table.Cell>
 				{modes.map(mode => (
-					<TransportModeIcon mode={mode} />
+					<TransportModeIcon key={`${guid}&${mode}`} mode={mode} />
 				))}
 				</Table.Cell>
-
 				<Table.Cell>
 					<Button 
 						basic
