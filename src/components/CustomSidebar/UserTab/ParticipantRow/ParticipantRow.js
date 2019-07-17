@@ -6,7 +6,7 @@ import './ParticipantRow.css';
 
 export default class ParticipantRow extends Component {
 	render() {
-		const { guid, name, duration, mode, color } = this.props;
+		const { guid, name, duration, modes, color } = this.props;
 		return (
 			<Table.Row>
 				<Table.Cell>
@@ -19,15 +19,17 @@ export default class ParticipantRow extends Component {
 					{duration} min
 				</Table.Cell>
 				<Table.Cell>
+				{modes.map(mode => (
 					<TransportModeIcon mode={mode} />
+				))}
 				</Table.Cell>
 
 				<Table.Cell>
 					<Button 
 						basic
-						icon="trash alternate"
-						color="red"
-						onClick={() => this.props.onParticipantRemove(guid) }
+						icon='trash alternate'
+						color='red'
+						onClick={() => this.props.onParticipantRemove(guid)}
 					/>
 				</Table.Cell>
 			</Table.Row>
