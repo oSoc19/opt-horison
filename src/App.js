@@ -6,31 +6,41 @@ import ExpandCollapseButton from './components/CustomSidebar/ExpandCollapseButto
 import { getAllPointSets } from './data/pointsets.js';
 
 import './App.css';
+import User from './models';
 
-const INITIAL_USER_LOCATION = [4.357028, 50.860708]; // lng - lat of BOSA
+//                               lng              - lat
+const INITIAL_USER_LOCATION   = [4.356112, 50.860786];
+const BOSA_USER_LOCATION      = [4.356400, 50.859772]; 
+const HERMAN_USER_LOCATION    = [4.350017, 50.865687];
+const KBC_USER_LOCATION       = [4.346777, 50.860929];
+const GAUCHERET_USER_LOCATION = [4.360043, 50.864025];
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
-    this.changeData = this.changeData.bind(this);
+    this.onParticipantsChange = this.onParticipantsChange.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
     this.handleHideClick = this.handleHideClick.bind(this);
     this.handleShowClick = this.handleShowClick.bind(this);
     this.handleSidebarHide = this.handleSidebarHide.bind(this);
     this.togglePointSet = this.togglePointSet.bind(this);
 
-    this.mapRef = React.createRef();
-
-    this.state = {
-        visible: true,
-        points: getAllPointSets(),
-        shouldUpdate: false,
-        mapCenter: INITIAL_USER_LOCATION,
-        initialUserLocation: INITIAL_USER_LOCATION,
-        visible: true,
-        data: []
+    this.state = { 
+      mapCenter: INITIAL_USER_LOCATION,
+      initialUserLocation: INITIAL_USER_LOCATION,
+      visible: true,
+      participants: [
+        new User('Pieter', 10, 'walk', GAUCHERET_USER_LOCATION, 'orange'),
+        new User('Tim', 15, 'walk', BOSA_USER_LOCATION, 'green'),
+        new User('Bert', 20, 'walk', HERMAN_USER_LOCATION, 'red'),
+        new User('Tinaël', 25, 'walk', KBC_USER_LOCATION, 'blue')
+      ],
+      loading: false,
+      points: getAllPointSets(),
+      shouldUpdate: false,
     };
+    this.mapRef = React.createRef();
   }
 
   componentWillMount = () => {
@@ -50,21 +60,22 @@ export default class App extends Component {
   }
 
   onDragEnd = ({lngLat}, guid) => {
-    const {data} = this.state;
-    const index = data.indexOf(data.find(p => p.guid === guid));
+    const {participants} = this.state;
+    const index = participants.indexOf(participants.find(p => p.guid === guid));
     if (index !== -1) {
-      data[index].location = [lngLat.lng, lngLat.lat];
-      this.setState({data});
+      participants[index].location = [lngLat.lng, lngLat.lat];
+      this.onParticipantsChange(participants);
+      console.log(participants[index].location);
     }
   }
 
-  changeData = (data) => {
-    if (!Array.isArray(data)) {
-      console.error('Data is not an array!', data);
+  onParticipantsChange = (participants) => {
+    if (!Array.isArray(participants)) {
+      console.error('"Participants" variable is not an array!', participants);
       return;
     }
-    console.log(data);
-    this.setState({data});
+    //TODO: check that participants is an array of User()
+    this.setState({participants});
   }
 
   handleHideClick = () => this.setState({ visible: false })
@@ -83,8 +94,12 @@ export default class App extends Component {
       };
   }
 
+  onLoadingStart = () => this.setState({loading: true});
+
+  onLoadingEnd = () => this.setState({loading:false});
+
   render() {
-    const { visible, data, mapCenter, initialUserLocation } = this.state;
+    const { visible, participants, mapCenter, initialUserLocation, loading } = this.state;
 
     return (
       <Sidebar.Pushable as={Segment}>
@@ -93,24 +108,29 @@ export default class App extends Component {
           onHideClick={this.handleHideClick}
           onShowClick={this.handleShowClick}>
         </ExpandCollapseButton>
-
-        <CustomSidebar
-            data={data}
-            changeData={this.changeData} 
-            pointSets={this.state.points}
-            visible={visible}
-            togglePointSet={this.togglePointSet}
-            onSidebarHide={this.handleSidebarHide}
-            initialUserLocation={initialUserLocation} />
-
+        
+        <CustomSidebar 
+          participants={participants} 
+          onParticipantsChange={this.onParticipantsChange} 
+          visible={visible} 
+          onSidebarHide={this.handleSidebarHide}
+          initialUserLocation={initialUserLocation}
+          pointSets={this.state.points}
+          togglePointSet={this.togglePointSet}
+        />
+    
         <Sidebar.Pusher>
-          <CustomMap
-            ref={this.mapRef}
-            center={mapCenter}
-            data={data}
-            pointSets={this.state.points.filter(ps => ps.active)}>
-            onDragEnd={this.onDragEnd}
-          </CustomMap>
+          <Segment loading={loading}>
+            <CustomMap
+              onLoadingStart={this.onLoadingStart}
+              onLoadingEnd={this.onLoadingEnd}
+              center={mapCenter}
+              participants={participants}
+              onDragEnd={this.onDragEnd}
+              ref={this.mapRef}
+              pointSets={this.state.points.filter(ps => ps.active)}
+            />
+          </Segment>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     );

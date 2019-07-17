@@ -25,7 +25,7 @@ export default class UserTab extends Component {
 	}
 
 	handleSort = (clickedColumn) => {
-		const { data } = this.props;
+		const { participants } = this.props;
 		const { column, direction } = this.state;
 	
 		if (column !== clickedColumn) {
@@ -33,7 +33,7 @@ export default class UserTab extends Component {
 			column: clickedColumn,
 			direction: 'ascending'
 		  });
-		  this.props.changeData(_.sortBy(this.props.data, [clickedColumn]));
+		  this.props.onParticipantsChange(_.sortBy(this.props.participants, [clickedColumn]));
 	
 		  return;
 		}
@@ -41,27 +41,27 @@ export default class UserTab extends Component {
 		this.setState({
 		  direction: direction === 'ascending' ? 'descending' : 'ascending',
 		});
-		this.props.changeData(data.reverse());
+		this.props.onParticipantsChange(participants.reverse());
 	}
 
 	handleAdd = (participant) => {
-		const { data } = this.props;
-		data.push(participant);
-		this.props.changeData(data);
+		const { participants } = this.props;
+		participants.push(participant);
+		this.props.onParticipantsChange(participants);
 		this.onModalClose();
 	}
 
 	handleRemove = (guid) => {
-		const { data } = this.props;
+		const { participants } = this.props;
 
-		let deletedRow = data.find(p => p.guid === guid);
+		let deletedRow = participants.find(p => p.guid === guid);
 		if (deletedRow) {
-			data.splice(data.indexOf(deletedRow), 1);
+			participants.splice(participants.indexOf(deletedRow), 1);
 		} else {
 			console.error('Deleting an undisplayed row is impossible!', deletedRow);
 		}
 
-		this.props.changeData(data);
+		this.props.onParticipantsChange(participants);
 	}
 
 	showModal = () => {
@@ -83,7 +83,7 @@ export default class UserTab extends Component {
 					closeModal={this.onModalClose} 
 					addParticipant={this.handleAdd} 
 				/>
-				<Table sortable celled compact>
+				<Table sortable celled compact unstackable>
 					<Table.Header>
 						<Table.Row>
 							<Table.HeaderCell 
@@ -111,7 +111,7 @@ export default class UserTab extends Component {
 						as={Table.Body}
 						duration={500}
 					>
-						{_.map(this.props.data,
+						{_.map(this.props.participants,
 							(participant) => 
 							<ParticipantRow
 								key={participant.guid}

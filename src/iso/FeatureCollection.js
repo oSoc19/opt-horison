@@ -16,7 +16,7 @@ class FeatureCollection {
         this.features.push(feature);
     }
     isempty(){
-        return this.features.length == 0;
+        return this.features.length === 0;
     }
 
 }

@@ -1,12 +1,16 @@
 import uuidv1 from 'uuid/v1';
 
 export default class User {
-    constructor(name, duration, mode, lngLat = [4.352440, 50.846480]) {       
+    constructor(name, duration, modes, lngLat = [4.352440, 50.846480], color = '#FFA500') {       
         this.guid = uuidv1();
         this.name = name;
         this.duration = duration;
-        this.mode = mode[0];
+        if (!Array.isArray(modes)) {
+            modes = [modes];
+        }
+        this.modes = modes;
         this.location = lngLat;
+        this.color = color;
     }
 
     set location(value) {
