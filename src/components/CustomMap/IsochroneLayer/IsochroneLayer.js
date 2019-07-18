@@ -4,7 +4,7 @@ import { GeoJSONLayer } from 'react-mapbox-gl';
 
 class IsochroneLayer extends Component {
     static defaultProps = {
-        polygons: [],
+        overlap: [],
     }
 
     render() {
@@ -12,7 +12,7 @@ class IsochroneLayer extends Component {
             <GeoJSONLayer
                 data={{
                     type: "FeatureCollection",
-                    features: this.props.polygons
+                    features: [this.props.overlap]
                 }}
                 linePaint={{
                     'line-color': '#008080',

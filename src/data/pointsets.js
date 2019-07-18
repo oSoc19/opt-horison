@@ -16,13 +16,13 @@ class PointSet {
         this.active = config.active;
     }
 
-    intersect(polygons) {
+    intersect(overlap) {
         let result = {
             type: "FeatureCollection",
             features: []
         };
 
-        for (let feature of polygons.features) {
+        for (let feature of overlap.features) {
             for (let ring of feature.geometry.coordinates) {
                 if (ring.length >= 4) {
                     let poly = polygon(feature.geometry.coordinates);
