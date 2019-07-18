@@ -84,12 +84,12 @@ export default class CustomMap extends Component {
 				containerStyle={containerStyle}
                 center={center}
             >
-                <IsochroneLayer polygon={overlap} />
+                <IsochroneLayer polygons={[overlap]} />
                 
                 {this.state.userIsochrones.map((fc, index) => (
                 <IsochroneLayer
                     key={index}
-                    polygon={fc.features[0]}
+                    polygons={fc.features}
                     color={this.props.participants[index].color}
                     opacity={0.1} 
                 />
