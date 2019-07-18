@@ -7,7 +7,6 @@ import UserCreationModal from './UserCreationModal/UserCreationModal';
 import './UserTab.css';
 
 export default class UserTab extends Component {
-
 	constructor(props) {
 		super(props);
 
@@ -24,7 +23,7 @@ export default class UserTab extends Component {
 		};
 	}
 
-	handleSort = (clickedColumn) => {
+	handleSort(clickedColumn) {
 		const { participants } = this.props;
 		const { column, direction } = this.state;
 	
@@ -44,14 +43,14 @@ export default class UserTab extends Component {
 		this.props.onParticipantsChange(participants.reverse());
 	}
 
-	handleAdd = (participant) => {
+	handleAdd(participant) {
 		const { participants } = this.props;
 		participants.push(participant);
 		this.props.onParticipantsChange(participants);
 		this.onModalClose();
 	}
 
-	handleRemove = (guid) => {
+	handleRemove(guid) {
 		const { participants } = this.props;
 
 		let deletedRow = participants.find(p => p.guid === guid);
@@ -64,11 +63,11 @@ export default class UserTab extends Component {
 		this.props.onParticipantsChange(participants);
 	}
 
-	showModal = () => {
+	showModal() {
 		this.setState({modalOpen: true});
 	}
 
-	onModalClose = () => {
+	onModalClose() {
 		this.setState({modalOpen: false});
 	}
 
@@ -132,6 +131,15 @@ export default class UserTab extends Component {
 									size='small' 
 									content='Add participant' 
 									onClick={this.showModal}
+								/>
+								<Button 
+									icon='refresh' 
+									labelPosition='left' 
+									color='green'
+									inverted
+									size='small' 
+									content='Refresh map' 
+									onClick={this.props.refreshMap}
 								/>
 							</Table.HeaderCell>
 						</Table.Row>

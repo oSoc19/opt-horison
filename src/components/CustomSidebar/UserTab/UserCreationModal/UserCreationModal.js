@@ -5,14 +5,13 @@ import UserCreationForm from './UserCreationForm';
 import './UserCreationModal.css';
 
 export default class UserCreationModal extends Component {
-
 	constructor(props) {
 		super(props);
 
 		this.onClose = this.onClose.bind(this);
 	}
 
-	onClose = () => {
+	onClose() {
 		this.props.closeModal();
 	};
 

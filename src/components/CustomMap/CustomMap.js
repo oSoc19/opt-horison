@@ -18,8 +18,8 @@ export default class CustomMap extends Component {
 			containerStyle: { height: '100vh', width: '100vw' },
             overlap: {},
             userIsochrones: [],
-            points: [],
-            overlapCenter: {}
+            overlapCenter: {},
+            points: []
         };
 	}
 
@@ -28,14 +28,12 @@ export default class CustomMap extends Component {
         let modes = [];
         let maxDurations = [];
 
-        this.props.participants.map(p => {
+        for (const p of this.props.participants) {
             participantLocations.push(p.location);
             modes.push(p.modes[0]); //TODO: take all modes into account
             maxDurations.push(p.duration);
-        });
-
+        }
         let resultContainer = await multipleOverlap(participantLocations, modes, maxDurations);
-        let overlap = resultContainer.overlap;
 
         this.setState({
             overlap: resultContainer.overlap,
@@ -62,10 +60,11 @@ export default class CustomMap extends Component {
         this.setState({ points });
     }
 
-    // TODO: refactor so it runs everytime you add/remove a user
-    // TODO (bis): just call setPolygons() through the reference in the parent
-    // component, like I'm doing for the points of interest
     async componentDidMount() {
+        await this.loadMapAndLayers();
+    }
+
+    async loadMapAndLayers() {
         this.props.onLoadingStart();
 
         await this.setPolygons();
@@ -77,6 +76,7 @@ export default class CustomMap extends Component {
 	render() {
         const {center, participants} = this.props;
         const {containerStyle, points, overlap} = this.state;
+
 		return (
 			<Map // eslint-disable-next-line
                 style='mapbox://styles/timutable/cjy0gxsnt01bc1crzdsrye0m5'
@@ -85,17 +85,21 @@ export default class CustomMap extends Component {
                 center={center}
             >
                 <IsochroneLayer polygon={overlap} />
-                {this.state.userIsochrones.map((fc, index) =>
-                    <IsochroneLayer
-                        key={index}
-                        polygon={fc.features[0]}
-                        color={this.props.participants[index].color}
-                        opacity={0.1}/>)}
+                
+                {this.state.userIsochrones.map((fc, index) => (
+                <IsochroneLayer
+                    key={index}
+                    polygon={fc.features[0]}
+                    color={this.props.participants[index].color}
+                    opacity={0.1} 
+                />
+                ))}
+
                 <PoiLayer overlap={overlap} points={points} />
+                
                 {participants.map((participant, index) => (
                 <Layer
-                    type="circle"
-                    id={`${participant.guid}-marker${index}`}
+                    type='circle'
                     key={`${participant.guid}-marker${index}`}
                     paint={{
                         'circle-stroke-width': 4,

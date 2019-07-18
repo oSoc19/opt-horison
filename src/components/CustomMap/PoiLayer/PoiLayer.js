@@ -1,15 +1,14 @@
-// @flow
 import React, { Component } from 'react';
 import { Layer, Feature } from 'react-mapbox-gl';
 
-class PoiLayer extends Component {
+export default class PoiLayer extends Component {
     static defaultProps = {
         points: []
-    }
+    };
 
     render() {
         return (
-            this.props.points.map(collection =>
+            this.props.points.map(collection => (
                 <Layer
                     key={collection.name}
                     type="symbol"
@@ -27,14 +26,16 @@ class PoiLayer extends Component {
                         "text-color": "#202",
                         "text-halo-color": "#fff",
                         "text-halo-width": 2
-                    }}>
-                    {collection.features.map((point, index) =>
-                        <Feature
-                            key={index}
-                            coordinates={point.geometry.coordinates}/>)}
-                </Layer>)
+                    }}
+                >
+                    {collection.features.map((point, index) => (
+                    <Feature
+                        key={index}
+                        coordinates={point.geometry.coordinates}
+                    />
+                    ))}
+                </Layer>
+            ))
         );
     }
 }
-
-export default PoiLayer;
