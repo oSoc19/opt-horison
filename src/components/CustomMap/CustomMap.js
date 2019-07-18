@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
-import { getAllPointSets } from '../../data/pointsets.js';
 import PoiLayer from './PoiLayer/PoiLayer.js';
 import IsochroneLayer from './IsochroneLayer/IsochroneLayer.js';
-import { findoptimum, run, intersect } from '../../iso/isochrone.js';
+import { multipleOverlap } from '../../iso/isochrone.js';
 
 import './CustomMap.css';
 
@@ -23,7 +22,17 @@ export default class CustomMap extends Component {
 	}
 
     async setPolygons() {
-        let resultContainer = await run();
+        const participantLocations = [];
+        const modes = [];
+        const maxDurations = [];
+        
+        this.props.participants.map(p => {
+            participantLocations.push(p.location);
+            modes.push(p.modes[0]); //TODO: take all modes into account
+            maxDurations.push(p.duration);
+        });
+        
+        let resultContainer = await multipleOverlap(participantLocations, modes, maxDurations);
         let overlap = resultContainer.overlap;
 
         this.setState({
