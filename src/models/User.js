@@ -21,3 +21,5 @@ export default class User {
         return this._location;
     }
 }
+
+export { User };

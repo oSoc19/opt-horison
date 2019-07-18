@@ -1,7 +1,7 @@
-import { Geometry } from './Geometry.js';
+import Geometry from './Geometry';
 
-class Feature {
-	constructor(coordinates,timeinmillisec) {
+export default class Feature {
+	constructor(coordinates, timeinmillisec) {
 		this.type = "Feature";
 		this.geometry = new Geometry(coordinates);
 		this.geometry.type = "Polygon";
