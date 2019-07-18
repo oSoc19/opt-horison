@@ -16,30 +16,44 @@ export default class CustomMap extends Component {
 		
 		this.state = {
 			containerStyle: { height: '100vh', width: '100vw' },
-            overlap: {},
-            userIsochrones: [],
-            overlapCenter: {},
+            overlap: {
+                feature: {},
+                center: {}
+            },
             points: []
         };
 	}
 
     async setPolygons() {
-        let participantLocations = [];
-        let modes = [];
-        let maxDurations = [];
+        const { participants } = this.props;
+        let resultContainer = {};
+        const locations = [];
+        const modes = [];
+        const maxDurations = [];
 
-        for (const p of this.props.participants) {
-            participantLocations.push(p.location);
-            modes.push(p.modes[0]); //TODO: take all modes into account
-            maxDurations.push(p.duration);
+        for (const participant of participants) {
+            locations.push(participant.location);
+            modes.push(participant.modes[0]); //TODO: take all modes into account
+            maxDurations.push(participant.duration);
         }
-        let resultContainer = await multipleOverlap(participantLocations, modes, maxDurations);
+        resultContainer = await multipleOverlap(locations, modes, maxDurations);
+        if (participants.length !== resultContainer.userIsochrones.length) {
+            console.error('An error occurred : the lengths are not the same!', participants, resultContainer);
+            return;
+        }
+
+        for (let i = 0; i < participants.length; i++) {
+            participants[i].isochrone = resultContainer.userIsochrones[i];
+            console.log(participants[i].isochrone);
+        }
 
         this.setState({
-            overlap: resultContainer.overlap,
-            userIsochrones: resultContainer.userIsochrones,
-            overlapCenter: resultContainer.overlapCenter
+            overlap: {
+                feature: resultContainer.overlap,
+                center: resultContainer.overlapCenter
+            }
         });
+        this.props.onParticipantsChange(participants);
     }
 
     setPoints() {
@@ -49,7 +63,7 @@ export default class CustomMap extends Component {
         for (let pointSet of pointSets) {
             let intersectingPoints = pointSet.intersect({
                 type: "FeatureCollection",
-                features: [this.state.overlap]
+                features: [this.state.overlap.feature]
             });
 
             intersectingPoints.image = pointSet.mapboxIcon;
@@ -66,10 +80,11 @@ export default class CustomMap extends Component {
 
     async loadMapAndLayers() {
         this.props.onLoadingStart();
-
+        
         await this.setPolygons();
         this.setPoints();
-
+        this.props.onCenterChange(this.state.overlap.center.geometry.coordinates);
+        
         this.props.onLoadingEnd();
     }
 
@@ -84,38 +99,36 @@ export default class CustomMap extends Component {
 				containerStyle={containerStyle}
                 center={center}
             >
-                <IsochroneLayer polygon={overlap} />
-                
-                {this.state.userIsochrones.map((fc, index) => (
-                <IsochroneLayer
-                    key={index}
-                    polygon={fc.features[0]}
-                    color={this.props.participants[index].color}
-                    opacity={0.1} 
-                />
-                ))}
-
-                <PoiLayer overlap={overlap} points={points} />
+                <IsochroneLayer polygons={[overlap.feature]} />
+                <PoiLayer overlap={overlap.features} points={points} />
                 
                 {participants.map((participant, index) => (
-                <Layer
-                    type='circle'
-                    key={`${participant.guid}-marker${index}`}
-                    paint={{
-                        'circle-stroke-width': 4,
-                        'circle-radius': 10,
-                        'circle-blur': 0.15,
-                        'circle-color': participant.color,
-                        'circle-stroke-color': '#000000'
-                    }}
-                >
-                    <Feature
-                        key={participant.guid}
-                        coordinates={participant.location}
-                        draggable
-                        onDragEnd={evt => this.props.onDragEnd(evt, participant.guid)}
-                    /> 
-                </Layer>
+                    <div key={index}>
+                        <IsochroneLayer
+                            key={index}
+                            polygons={participant.isochrone.features}
+                            color={participant.color}
+                            opacity={0.1} 
+                        />    
+                        <Layer
+                            type='circle'
+                            key={`${participant.guid}-marker${index}`}
+                            paint={{
+                                'circle-stroke-width': 4,
+                                'circle-radius': 10,
+                                'circle-blur': 0.15,
+                                'circle-color': participant.color,
+                                'circle-stroke-color': '#000000'
+                            }}
+                        >
+                            <Feature
+                                key={participant.guid}
+                                coordinates={participant.location}
+                                draggable
+                                onDragEnd={evt => this.props.onDragEnd(evt, participant.guid)}
+                            /> 
+                        </Layer>
+                    </div>
                 ))}
 			</Map>
 		);

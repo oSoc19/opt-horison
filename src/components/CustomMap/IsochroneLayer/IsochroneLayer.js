@@ -3,7 +3,7 @@ import { GeoJSONLayer } from 'react-mapbox-gl';
 
 export default class IsochroneLayer extends Component {
     static defaultProps = {
-        polygon: [],
+        polygons: [],
         color: '#008080',
         opacity: 1
     };
@@ -13,7 +13,7 @@ export default class IsochroneLayer extends Component {
             <GeoJSONLayer
                 data={{
                     type: "FeatureCollection",
-                    features: [this.props.polygon]
+                    features: this.props.polygons
                 }}
                 linePaint={{
                     'line-color': this.props.color,

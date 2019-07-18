@@ -11,6 +11,7 @@ export default class User {
         this.modes = modes;
         this.location = location;
         this.color = color;
+        this.isochrone = [];
     }
 }
 
