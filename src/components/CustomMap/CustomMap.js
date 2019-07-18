@@ -18,16 +18,19 @@ export default class CustomMap extends Component {
 		this.state = {
 			containerStyle: { height: '100vh', width: '100vw' },
             overlap: {},
-            points: []
+            userIsochrones: [],
+            points: [],
+            overlapCenter: {}
         };
 	}
 
     async setPolygons() {
         let resultContainer = await run();
-        let overlap = resultContainer.overlap;
 
         this.setState({
-            overlap: overlap
+            overlap: resultContainer.overlap,
+            userIsochrones: resultContainer.userIsochrones,
+            overlapCenter: resultContainer.overlapCenter
         });
     }
 
@@ -71,7 +74,13 @@ export default class CustomMap extends Component {
 				containerStyle={containerStyle}
                 center={center}
             >
-                <IsochroneLayer overlap={overlap} />
+                <IsochroneLayer polygon={overlap} />
+                {this.state.userIsochrones.map((fc, index) =>
+                    <IsochroneLayer
+                        key={index}
+                        polygon={fc.features[0]}
+                        color={this.props.participants[index].color}
+                        opacity={0.1}/>)}
                 <PoiLayer overlap={overlap} points={points} />
                 {participants.map((participant, index) => (
                 <Layer
