@@ -27,6 +27,7 @@ export default class App extends Component {
     this.refreshMap = this.refreshMap.bind(this);
     this.onLoadingStart = this.onLoadingStart.bind(this);
     this.onLoadingEnd = this.onLoadingEnd.bind(this);
+    this.onCenterChange = this.onCenterChange.bind(this);
 
     this.state = { 
       mapCenter: INITIAL_USER_LOCATION,
@@ -102,7 +103,7 @@ export default class App extends Component {
   };
 
   togglePointSet(pointSetName) {
-      return e => {
+      return () => {
           const pointSets = [ ...this.state.pointSets ];
           const pointSet = pointSets.find(ps => ps.name === pointSetName);
           pointSet.active = !pointSet.active;
@@ -113,6 +114,10 @@ export default class App extends Component {
 
   refreshMap() {
     this.mapRef.current.loadMapAndLayers();
+  }
+
+  onCenterChange(newCenter) {
+    this.setState({center: newCenter});
   }
 
   render() {
@@ -127,25 +132,33 @@ export default class App extends Component {
         </ExpandCollapseButton>
         
         <CustomSidebar 
-          participants={participants} 
-          onParticipantsChange={this.onParticipantsChange} 
-          visible={visible} 
+          visible={visible}  
           onSidebarHide={this.handleSidebarHide}
+
+          participants={participants} 
+          onParticipantsChange={this.onParticipantsChange}
+
+          refreshMap={this.refreshMap}
           initialUserLocation={initialUserLocation}
+
           pointSets={this.state.pointSets}
           togglePointSet={this.togglePointSet}
-          refreshMap={this.refreshMap}
         />
     
         <Sidebar.Pusher>
           <Segment loading={loading}>
             <CustomMap
+              ref={this.mapRef}  
               onLoadingStart={this.onLoadingStart}
               onLoadingEnd={this.onLoadingEnd}
+
               center={mapCenter}
+              onCenterChange={this.onCenterChange}
+
               participants={participants}
+              onParticipantsChange={this.onParticipantsChange}
               onDragEnd={this.onDragEnd}
-              ref={this.mapRef}
+              
               pointSets={this.state.pointSets.filter(ps => ps.active)}
             />
           </Segment>
