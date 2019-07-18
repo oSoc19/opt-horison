@@ -5,7 +5,6 @@ import './UserCreationForm.css';
 import User from '../../../../../models';
 
 export default class UserCreationForm extends Component {
-
 	constructor(props) {
 		super(props);
 
@@ -28,7 +27,7 @@ export default class UserCreationForm extends Component {
 		};
 	}
 	
-	isColor = (strColor) => {
+	isColor(strColor) {
 		var s = new Option().style;
 		s.color = strColor;
 
@@ -36,7 +35,7 @@ export default class UserCreationForm extends Component {
 		return s.color === strColor.toLowerCase();
 	}
 
-	onSubmit (e) {
+	onSubmit(e) {
 		e.preventDefault();
 		let error = false;
 		const {name, duration, modes, color, agreement } = this.state;
@@ -84,7 +83,7 @@ export default class UserCreationForm extends Component {
 		this.props.addParticipant(new User(name, duration, modes, this.props.initialUserLocation, color));
 	}
 
-	onChange (e, {name, value}) {
+	onChange(e, {name, value}) {
 		e.preventDefault();
 
 		if ([name].toString() === 'mode') {

@@ -3,12 +3,11 @@ import { Sidebar, Segment } from 'semantic-ui-react';
 import CustomSidebar from './components/CustomSidebar';
 import CustomMap from './components/CustomMap';
 import ExpandCollapseButton from './components/CustomSidebar/ExpandCollapseButton';
-import { getAllPointSets } from './data/pointsets.js';
+import PointSetsData from './data/pointsets';
 
 import './App.css';
 import { User } from './models';
 
-//                               lng              - lat
 const INITIAL_USER_LOCATION   = [4.356112, 50.860786];
 const BOSA_USER_LOCATION      = [4.356331, 50.860699]; 
 const HERMAN_USER_LOCATION    = [4.350018, 50.865685];
@@ -25,6 +24,9 @@ export default class App extends Component {
     this.handleShowClick = this.handleShowClick.bind(this);
     this.handleSidebarHide = this.handleSidebarHide.bind(this);
     this.togglePointSet = this.togglePointSet.bind(this);
+    this.refreshMap = this.refreshMap.bind(this);
+    this.onLoadingStart = this.onLoadingStart.bind(this);
+    this.onLoadingEnd = this.onLoadingEnd.bind(this);
 
     this.state = { 
       mapCenter: INITIAL_USER_LOCATION,
@@ -37,13 +39,13 @@ export default class App extends Component {
         new User('Pieter', 10, 'car', GAUCHERET_USER_LOCATION, 'orange')        
       ],
       loading: false,
-      points: getAllPointSets(),
+      pointSets: PointSetsData.getAllPointSets(),
       shouldUpdate: false,
     };
     this.mapRef = React.createRef();
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     navigator.geolocation.getCurrentPosition(
       ({coords}) => {
         const { latitude, longitude } = coords;
@@ -59,41 +61,59 @@ export default class App extends Component {
     );
   }
 
-  onDragEnd = ({lngLat}, guid) => {
+  handleHideClick() {
+    this.setState({ visible: false });
+  }
+
+  handleShowClick() {
+    this.setState({ visible: true });
+  }
+
+  handleSidebarHide() {
+    this.setState({ visible: false });
+  }
+  
+  onLoadingStart() {
+    this.setState({loading: true});
+  }
+
+  onLoadingEnd() {
+    this.setState({loading:false});
+  }
+
+  onDragEnd({lngLat}, guid) {
     const {participants} = this.state;
     const index = participants.indexOf(participants.find(p => p.guid === guid));
     if (index !== -1) {
       participants[index].location = [lngLat.lng, lngLat.lat];
       this.onParticipantsChange(participants);
+    } else {
+      console.error('Participant not found!');
     }
-  }
+  };
 
-  onParticipantsChange = (participants) => {
+  onParticipantsChange(participants) {
     if (!Array.isArray(participants)) {
       console.error('"Participants" variable is not an array!', participants);
       return;
     }
     //TODO: check that participants is an array of User()
     this.setState({participants});
-  }
-
-  handleHideClick = () => this.setState({ visible: false })
-  handleShowClick = () => this.setState({ visible: true })
-  handleSidebarHide = () => this.setState({ visible: false })
+  };
 
   togglePointSet(pointSetName) {
       return e => {
-          const points = [ ...this.state.points ];
-          const pointSet = points.find(ps => ps.name === pointSetName);
+          const pointSets = [ ...this.state.pointSets ];
+          const pointSet = pointSets.find(ps => ps.name === pointSetName);
           pointSet.active = !pointSet.active;
-          this.setState({ points });
+          this.setState({ pointSets });
           this.mapRef.current.setPoints()
       };
+  };
+
+  refreshMap() {
+    this.mapRef.current.loadMapAndLayers();
   }
-
-  onLoadingStart = () => this.setState({loading: true});
-
-  onLoadingEnd = () => this.setState({loading:false});
 
   render() {
     const { visible, participants, mapCenter, initialUserLocation, loading } = this.state;
@@ -112,8 +132,9 @@ export default class App extends Component {
           visible={visible} 
           onSidebarHide={this.handleSidebarHide}
           initialUserLocation={initialUserLocation}
-          pointSets={this.state.points}
+          pointSets={this.state.pointSets}
           togglePointSet={this.togglePointSet}
+          refreshMap={this.refreshMap}
         />
     
         <Sidebar.Pusher>
@@ -125,7 +146,7 @@ export default class App extends Component {
               participants={participants}
               onDragEnd={this.onDragEnd}
               ref={this.mapRef}
-              pointSets={this.state.points.filter(ps => ps.active)}
+              pointSets={this.state.pointSets.filter(ps => ps.active)}
             />
           </Segment>
         </Sidebar.Pusher>

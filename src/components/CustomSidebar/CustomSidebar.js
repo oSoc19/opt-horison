@@ -27,7 +27,8 @@ export default class CustomSidebar extends Component {
                 },
                 pane: {
                     key: 'usersPane',
-                    content: (<UserTab 
+                    content: (<UserTab
+                        refreshMap={this.props.refreshMap}
                         initialUserLocation={this.props.initialUserLocation} 
                         onParticipantsChange={this.props.onParticipantsChange} 
                         participants={this.props.participants}

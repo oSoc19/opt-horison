@@ -1,7 +1,7 @@
 export default class Coordinates {
-    constructor(long, lat) {
-        this.longitude = long;
-        this.latitude = lat;
+    constructor(lng, lat) {
+        this.longitude = parseFloat(lng);
+        this.latitude = parseFloat(lat);
     }
 }
 
