@@ -2,51 +2,66 @@ import Planner from 'plannerjs';
 import intersect from '@turf/intersect';
 import area from '@turf/area';
 import centerOfMass from '@turf/center-of-mass';
-import { Feature } from './Feature.js';
-import { FeatureCollection } from './FeatureCollection.js';
-import {ResultContainer} from '../models/ResultContainer.js';
+import Feature from '../models/Feature';
+import FeatureCollection from '../models/FeatureCollection';
+import ResultContainer from '../models/ResultContainer';
+import Coordinates from '../models/Coordinates';
 
-let bosa = {};
-let herman = {};
-let KBC = {};
-let Gaucheret = {};
-bosa.longitude = 4.356331;
-bosa.latitude = 50.860699;
-herman.longitude = 4.350018;
-herman.latitude = 50.865685;
-KBC.longitude = 4.346777;
-KBC.latitude = 50.860929;
-Gaucheret.longitude = 4.360043;
-Gaucheret.latitude = 50.864025;
+let bosa = new Coordinates(4.356331, 50.860699);
+let herman = new Coordinates(4.350018, 50.865685);
+let KBC = new Coordinates(4.346777, 50.860929);
+let Gaucheret = new Coordinates(4.360043, 50.864025);
+
+function convertCoordinatesArrayToObject(coordinatesArray) {
+    const locations = [];
+    for (const coordinates of coordinatesArray) {
+        locations.push(new Coordinates(coordinates[0], coordinates[1]));
+    }
+    return locations;
+}
+
+function convertModesToProfiles(modes) {
+    const profiles = [];
+    
+    for (const mode of modes) {
+        switch(mode) {
+            case 'car':
+                profiles.push('http://hdelva.be/profile/car');
+                break;
+            default: profiles.push('PEDESTRIAN');
+        }
+    }
+
+    return profiles;
+}
 
 /** beginning of multiOverlap algorithms.*/
-async function multipleOverlap(locations, profiles, maxes){   
+async function multipleOverlap(coordinates, modes, maxes) {   
+    var profiles = convertModesToProfiles(modes);
+    var locations = convertCoordinatesArrayToObject(coordinates);
     //make generators 
-    var generators =[];
+    var generators = [];
     var collections = [];
     var profileIndex = 0;
-    for(const loc of locations){
-        var generator =  makegenerator(loc); 
+    for (const loc of locations) {
+        var generator = makegenerator(loc); 
         await generator.setProfileID(profiles[profileIndex]);
-        console.log("set profile to: "+ profiles[profileIndex]);
-        console.log(generator);
         generators.push(generator);
         collections.push(new FeatureCollection());
         profileIndex++;      
     }
-    console.log("generators: ",generators);
     // generate intervals
     var intervalArray = generateIntervalArray(maxes);
     // generate isochrones+overlap
     var i = 0;
     var overlap = null;
-    while(i < intervalArray[0].length && checkOverlap(overlap)){        
+    while(i < intervalArray[0].length && checkOverlap(overlap)) {        
         var tempIsochrones = [];
         var j = 0;
-        for(let generator of generators) {// generate the isochrones at time for all generators and store them so we can intersect
+        for (let generator of generators) {// generate the isochrones at time for all generators and store them so we can intersect
             var time = intervalArray[j][i];
-            console.log("time: " + time);
-            let isochrone = await generateIsochroneFromGenerator(generator,time);
+            //console.log("time: " + time);
+            let isochrone = await generateIsochroneFromGenerator(generator, time);
             collections[j].addOneFeature(isochrone);
             tempIsochrones.push(isochrone);
             j++;            
@@ -58,63 +73,64 @@ async function multipleOverlap(locations, profiles, maxes){
     var center = null;
 
     if(overlap == null){
-        console.log("no overlap found within max");
+        //console.log("no overlap found within max");
     } else{
-        console.log("overlap: "+ overlap);
+        //console.log("overlap: "+ overlap);
         resultingOverlap = overlap;
         center = centerOfMass(overlap);
-        console.log("center:",center);
+        //console.log("center:",center);
     }
 
-    return new ResultContainer(resultingOverlap,collections,center);
+    return new ResultContainer(resultingOverlap, collections, center);
 }
-function generateIntervalArray(maxes){
+
+function generateIntervalArray(maxes) {
     var maximums = adjustMax(maxes);
     var result = [];
-    for(const maximum of maximums){
+    for (const maximum of maximums) {
         var intervals = generateIntervals(maximum);
         result.push(intervals);
     }
     return result;
 }
-function adjustMax(maxes){
-    for(let i =0; i < maxes.length; i++){
-        if(maxes[i] < 5){
-            console.log("The maximum should at least me 5");
+
+function adjustMax(maxes) {
+    for (let i = 0; i < maxes.length; i++) {
+        if (maxes[i] < 5) {
             maxes[i] = 5;
         }
     }
     return maxes
 }
-function checkOverlap(overlap){//checks if the overlap is null or smaller than the minimal area.
+
+function checkOverlap(overlap) {//checks if the overlap is null or smaller than the minimal area.
     var minimalArea = 10000;//a bit smaller than two soccer fields.
-    if(overlap == null){
+    if (overlap == null) {
         return true;
-    }else{
-        console.log("the area of the overlap is: " + area(overlap));
+    } else{
+        //console.log("the area of the overlap is: " + area(overlap));
         return (area(overlap) < minimalArea);
     }
 
 }
-function multipleIntersection(isochrones){
+
+function multipleIntersection(isochrones) {
     var result = intersect(isochrones.pop(),isochrones.pop());
-    while( result != null && isochrones.length >0){
-        result = intersect(result,isochrones.pop());
+    while (result != null && isochrones.length >0) {
+        result = intersect(result, isochrones.pop());
     }
-    if(result == null){
-        console.log("no overlap found")
-    }
-    else{
-        console.log("there is a overlap")
+
+    if (result == null) {
+        console.log("no overlap found");
+    } else {
+        console.log("there is a overlap");
         //do something with the result
         //question: do we want to return null if no intersection found? probobly right?
     }
     return result;
-
 }
 
-
-async function findoptimum(location1, location2, max){
+async function findoptimum(location1, location2, max) {
     var generator1 = makegenerator(location1);
     var generator2 = makegenerator(location2);
     var collection1 = new FeatureCollection();
@@ -130,96 +146,86 @@ async function findoptimum(location1, location2, max){
     while (i < intervals.length && intersection == null ){
         var time = intervals[i];
         console.log("time = "+ time);
-        var isochrone1 = await generateIsochroneFromGenerator(generator1,time);
-        var isochrone2 = await generateIsochroneFromGenerator(generator2,time);
+        var isochrone1 = await generateIsochroneFromGenerator(generator1, time);
+        var isochrone2 = await generateIsochroneFromGenerator(generator2, time);
         collection1.addOneFeature(isochrone1);
         collection2.addOneFeature(isochrone2);
         intersection = intersect(isochrone1, isochrone2);
         i++;
     }
-    if( intersection != null){
+    if (intersection != null) {
         console.log("start intersection");
         console.log(intersection.geometry.coordinates);
         console.log("end of intersection");
         return intersection;
-    }
-    else{
+    } else {
         //TODO: integrate this message in visuals
-        console.log("There is no place for you to meet within " + max +" minutes");
+        console.log(`There is no place for you to meet within ${max} minutes`);
         console.log(intersection);
         return new Feature();
     }
        
 }
 
-async function generateAllIsoChrones(location, max){
+async function generateAllIsoChrones(location, max) {
     let generator = makegenerator(location);
     let collection = new FeatureCollection();
     let intervals = generateIntervals(max);
-    for(let interval of intervals) {
-        let isochrone = await generateIsochroneFromGenerator(generator,interval);
+    for (let interval of intervals) {
+        let isochrone = await generateIsochroneFromGenerator(generator, interval);
         collection.addOneFeature(isochrone);
     }
     return collection;
 }
 
-function generateIntervals(max){
+function generateIntervals(max) {
     // do we want scaling like this or do we want fixed intervals, eventually dependent on user profile.
     let NbOfIsos = 5;
     let delta = max/NbOfIsos;
     let intervals = [];
-    for(let i = 1; i <= NbOfIsos; i++)  {
+    for (let i = 1; i <= NbOfIsos; i++) {
         intervals.push(i*delta);
     }
     return intervals;
 }
 
-async function generateIsochroneFromGenerator(generator,timeinminutes){
+async function generateIsochroneFromGenerator(generator, timeinminutes) {
     var data = await generator.getIsochrone(scaleTime(timeinminutes), true);
     var isochrone = data.isochrones[0];//only take the first isochrone, don't take holes into account.
     var polygon = convertToPolygon(isochrone);
-    var feature = new Feature(polygon,scaleTime(timeinminutes));
+    var feature = new Feature(polygon, scaleTime(timeinminutes));
     return feature; 
 }
 
-function makegenerator(location){
+function makegenerator(location) {
     var result = new Planner.IsochroneGenerator(location);
     return result;
 }
 
-/* async function generateIsochrone(location,timeinminutes){
-    await p.init(location);// initialize every time because we assume the tiles will be cached correctly.
-    var data = await p.getIsochrone(scaleTime(timeinminutes), true);
-    var isochrone = data.isochrones[0];//only take the first isochrone, don't take holes into account.
-    var polygon = convertToPolygon(isochrone);
-    var feature = new Feature(polygon,scaleTime(timeinminutes));
-    console.log(feature.geometry.coordinates);
-    return feature;
-}*/
-
-function convertToPolygon(isochrone){
+function convertToPolygon(isochrone) {
     let flipForMapBox = true;
     const polygon = [];
-    if(flipForMapBox){//flips the coordinates if necessary
-        polygon.push(isochrone[0].map((p)=>[p.longitude,p.latitude]));  
+
+    if (flipForMapBox) {//flips the coordinates if necessary
+        polygon.push(isochrone[0].map(p => [p.longitude, p.latitude]));  
+    } else {
+        polygon.push(isochrone[0].map(p => [p.latitude, p.longitude]));
     }
-    else{
-    polygon.push(isochrone[0].map((p)=>[p.latitude,p.longitude]));
-    }
+
     polygon[0].push(polygon[0][0]);//adds the first point to the end of the polygon so it makes a full circle
     return polygon;
 
 }
 
-function scaleTime(timeInMinutes){
+function scaleTime(timeInMinutes) {
     // var sectomilli = 1000;
     var secToMilli = 1000; // TODO: fake because car profile
     var minToSec = 60;
     return timeInMinutes * secToMilli * minToSec;
 }
 
-async function run(){
-    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret],AllCars,[5,5,5,5]);
+async function run() {
+    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret], CarsAndPedestrians, [10,10,10,10]);
     return overlap;
 }
 
@@ -234,4 +240,5 @@ var GaucheretIsochrones = {"type":"FeatureCollection","features":[{"type":"Featu
 var AllPedestrians = ["PEDESTRIAN","PEDESTRIAN","PEDESTRIAN","PEDESTRIAN"];
 var AllCars = ["http://hdelva.be/profile/car", "http://hdelva.be/profile/car", "http://hdelva.be/profile/car", "http://hdelva.be/profile/car"];
 var CarsAndPedestrians = ["PEDESTRIAN", "http://hdelva.be/profile/car", "PEDESTRIAN", "http://hdelva.be/profile/car"];
-export { findoptimum, run, intersect };
+
+export { multipleOverlap, run };

@@ -6,12 +6,12 @@ import ExpandCollapseButton from './components/CustomSidebar/ExpandCollapseButto
 import { getAllPointSets } from './data/pointsets.js';
 
 import './App.css';
-import User from './models/User.js';
+import { User } from './models';
 
 //                               lng              - lat
 const INITIAL_USER_LOCATION   = [4.356112, 50.860786];
-const BOSA_USER_LOCATION      = [4.356400, 50.859772]; 
-const HERMAN_USER_LOCATION    = [4.350017, 50.865687];
+const BOSA_USER_LOCATION      = [4.356331, 50.860699]; 
+const HERMAN_USER_LOCATION    = [4.350018, 50.865685];
 const KBC_USER_LOCATION       = [4.346777, 50.860929];
 const GAUCHERET_USER_LOCATION = [4.360043, 50.864025];
 
@@ -31,10 +31,10 @@ export default class App extends Component {
       initialUserLocation: INITIAL_USER_LOCATION,
       visible: true,
       participants: [
-        new User('Pieter', 10, 'walk', GAUCHERET_USER_LOCATION, 'orange'),
         new User('Tim', 15, 'walk', BOSA_USER_LOCATION, 'green'),
-        new User('Bert', 20, 'walk', HERMAN_USER_LOCATION, 'red'),
-        new User('Tinaël', 25, 'walk', KBC_USER_LOCATION, 'blue')
+        new User('Bert', 10, 'car', HERMAN_USER_LOCATION, 'red'),
+        new User('Tinaël', 20, 'walk', KBC_USER_LOCATION, 'blue'),
+        new User('Pieter', 10, 'car', GAUCHERET_USER_LOCATION, 'orange')        
       ],
       loading: false,
       points: getAllPointSets(),
@@ -65,7 +65,6 @@ export default class App extends Component {
     if (index !== -1) {
       participants[index].location = [lngLat.lng, lngLat.lat];
       this.onParticipantsChange(participants);
-      console.log(participants[index].location);
     }
   }
 
