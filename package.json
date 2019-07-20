@@ -10,6 +10,7 @@
     "@turf/intersect": "^6.1.3",
     "@turf/points-within-polygon": "^5.1.5",
     "mapbox-gl": "^1.1.0",
+    "plannerjs": "0.0.4-alpha",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-mapbox-gl": "^4.4.0",
