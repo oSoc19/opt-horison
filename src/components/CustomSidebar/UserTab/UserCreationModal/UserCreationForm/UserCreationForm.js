@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import { Form } from 'semantic-ui-react';
 
 import './UserCreationForm.css';
-import User from '../../../../../models';
+import {User} from '../../../../../models';
 
 export default class UserCreationForm extends Component {
 	constructor(props) {
@@ -79,8 +79,12 @@ export default class UserCreationForm extends Component {
 			return;
 		}
 		this.setState({formError: false});
-			
-		this.props.addParticipant(new User(name, duration, modes, this.props.initialUserLocation, color));
+		
+		const person = new User(name, duration, modes, this.props.initialUserLocation, color);
+
+		console.log("person: ",person);
+
+		this.props.addParticipant(person);
 	}
 
 	onChange(e, {name, value}) {
