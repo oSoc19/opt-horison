@@ -7,35 +7,20 @@ import FeatureCollection from '../models/FeatureCollection';
 import ResultContainer from '../models/ResultContainer';
 import Coordinates from '../models/Coordinates';
 
+/** local location variables useful for learning your way around the code. 
 let bosa = new Coordinates(4.356331, 50.860699);
 let herman = new Coordinates(4.350018, 50.865685);
 let KBC = new Coordinates(4.346777, 50.860929);
 let Gaucheret = new Coordinates(4.360043, 50.864025);
+*/
 
-function convertModesToProfiles(modes) {
-    const profiles = [];
-    
-    for (const mode of modes) {
-        switch(mode) {
-            case 'car':
-                profiles.push('http://hdelva.be/profile/car');
-                break;
-            default: profiles.push('PEDESTRIAN');
-        }
-    }
-
-    return profiles;
-}
-
-function convertCoordinatesArrayToObject(coordinatesArray) {
-    const locations = [];
-    for (const coordinates of coordinatesArray) {
-        locations.push(new Coordinates(coordinates[0], coordinates[1]));
-    }
-    return locations;
-}
-
-/** beginning of multiOverlap algorithms.*/
+/** This function is the main function of our program.
+ *  It will calculate a  ResultContainer based upon 3 lists.
+ *      -The first list contains the coordinates of each participant.
+ *      -The second list contains the mode of transport for every participant.
+ *      -The third list contains the maximum amount of travel time for each participant.
+ *  
+*/
 async function multipleOverlap(coordinates, modes, maxes) {   
     var profiles = convertModesToProfiles(modes);
     var locations = convertCoordinatesArrayToObject(coordinates);
@@ -84,7 +69,7 @@ async function multipleOverlap(coordinates, modes, maxes) {
 
     return new ResultContainer(resultingOverlap, collections, center);
 }
-
+/** This function generates the array of intervals, based on the array of maximum travel times for each user. */
 function generateIntervalArray(maxes) {
     var maximums = adjustMax(maxes);
     var result = [];
@@ -94,7 +79,7 @@ function generateIntervalArray(maxes) {
     }
     return result;
 }
-
+/** This function adjusts the array of maximum walking times so that the smallest maximum is 5 minutes. */
 function adjustMax(maxes) {
     for (let i = 0; i < maxes.length; i++) {
         if (maxes[i] < 5) {
@@ -103,18 +88,18 @@ function adjustMax(maxes) {
     }
     return maxes
 }
-
-function checkOverlap(overlap) {//checks if the overlap is null or smaller than the minimal area.
+/** This function checks if the overlap is null or smaller than the minimal area. */
+function checkOverlap(overlap) {
     var minimalArea = 10000;//a bit smaller than two soccer fields.
     if (overlap == null) {
         return true;
     } else {
-        //console.log("the area of the overlap is: " + area(overlap));
         return (area(overlap) < minimalArea);
     }
 
 }
-
+/** This function, given a list of isochrones, calculates the area where they all overlap. 
+ * If there is no such area this function returns null. */
 function multipleIntersection(isochrones) {
     var result = null;
     if (isochrones.length < 1){
@@ -131,51 +116,16 @@ function multipleIntersection(isochrones) {
         console.log("no overlap found");
     } else {
         console.log("there is a overlap");
-        //do something with the result
-        //question: do we want to return null if no intersection found? probobly right?
     }
     return result;
 }
-
-async function findOptimum(location1, location2, max) {
-    var generator1 = makeGenerator(location1);
-    var generator2 = makeGenerator(location2);
-    var collection1 = new FeatureCollection();
-    var collection2 = new FeatureCollection();
-
-    if (max < 5) {
-        console.log("max should be bigger than 5");// replace this with proper error handling
-        max = 5;
-    } 
-    var intervals = generateIntervals(max);
-    var i = 1;
-    var intersection = null;
-    while (i < intervals.length && intersection == null ){
-        var time = intervals[i];
-        console.log("time = "+ time);
-        var isochrone1 = await generateIsochroneFromGenerator(generator1, time);
-        var isochrone2 = await generateIsochroneFromGenerator(generator2, time);
-        collection1.addOneFeature(isochrone1);
-        collection2.addOneFeature(isochrone2);
-        intersection = intersect(isochrone1, isochrone2);
-        i++;
-    }
-    if (intersection != null) {
-        console.log("start intersection");
-        console.log(intersection.geometry.coordinates);
-        console.log("end of intersection");
-        return intersection;
-    } else {
-        //TODO: integrate this message in visuals
-        console.log(`There is no place for you to meet within ${max} minutes`);
-        console.log(intersection);
-        return new Feature();
-    }
-       
-}
-
-async function generateAllIsoChrones(location, max) {
+/** This function returns a FeatureCollection with all the isochrones for a given location that are within the max amount of time for a certain profile.
+ *  Tis function is currently not used by the application however it is a good function for getting to know the code.
+ *  This function might also be very useful for precalculating isochrones.
+ */
+async function generateAllIsoChrones(location, profile, max) {
     let generator = makeGenerator(location);
+    await generator.setProfileID(profile);
     let collection = new FeatureCollection();
     let intervals = generateIntervals(max);
     for (let interval of intervals) {
@@ -184,10 +134,9 @@ async function generateAllIsoChrones(location, max) {
     }
     return collection;
 }
-
+/** This function returns the array of intervals given the maximum amount of time. */
 function generateIntervals(max) {
-    // do we want scaling like this or do we want fixed intervals, eventually dependent on user profile.
-    let NbOfIsos = 5;
+    let NbOfIsos = 5;// indicates the amount of isochrones we would like to calculate.
     let delta = max/NbOfIsos;
     let intervals = [];
     for (let i = 1; i <= NbOfIsos; i++) {
@@ -195,17 +144,20 @@ function generateIntervals(max) {
     }
     return intervals;
 }
-
+/** This function returns a new feature containing the Isochrone generated by the given generator,
+ *  that lays at the given amount of time.
+*/
 async function generateIsochroneFromGenerator(generator, timeInMinutes) {
     var data = await generator.getIsochrone(scaleTime(timeInMinutes), true);
     var polygon = convertToPolygon(data.isochrones[0]); //only take the first isochrone, don't take holes into account.
     return new Feature(polygon, scaleTime(timeInMinutes));
 }
-
+/** This function initializes a IsochroneGenerator for a given location.*/
 function makeGenerator(location) {
     return new Planner.IsochroneGenerator(location);
 }
-
+/** This function, given an isochrone generatad by the isochrone generator from planner.js,
+ *  returns a polygon in such a form that it can be used in a Feature and thus can be drawn on the map by mapBox. */
 function convertToPolygon(isochrone) {
     let flipForMapBox = true;
     const polygon = [];
@@ -220,16 +172,42 @@ function convertToPolygon(isochrone) {
     return polygon;
 
 }
-
+/** This function scales an amount of time in minutes up to milliseconds */
 function scaleTime(timeInMinutes) {
-    var secToMilli = 1000; //TODO: fake because car profile
+    var secToMilli = 1000;
     var minToSec = 60;
     return timeInMinutes * secToMilli * minToSec;
 }
+/** This function converts an array of transportation modes passed from the UI to actual profiles
+ *  which can be used the isochrone generator. */
+function convertModesToProfiles(modes) {
+    const profiles = [];
+    
+    for (const mode of modes) {
+        switch(mode) {
+            case 'car':
+                profiles.push('http://hdelva.be/profile/car');
+                break;
+            default: profiles.push('PEDESTRIAN');
+        }
+    }
+
+    return profiles;
+}
+/** This function converts an array containing coordinates in the form [longitude,latitude] to a Coordinates object.
+ *  The input that comes from the UI is in the [longitude, latitude] form, while the isochrone generator from planner.js uses the Cooridnates object.
+ */
+function convertCoordinatesArrayToObject(coordinatesArray) {
+    const locations = [];
+    for (const coordinates of coordinatesArray) {
+        locations.push(new Coordinates(coordinates[0], coordinates[1]));
+    }
+    return locations;
+}
 
 async function run() {
-    var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret], CarsAndPedestrians, [15, 10, 20, 10]);
-    return overlap;
+  //  var overlap = await multipleOverlap([bosa, herman, KBC, Gaucheret], CarsAndPedestrians, [15, 10, 20, 10]);
+    //return overlap;
 }
 
 /*********************************************************************************************************************************
