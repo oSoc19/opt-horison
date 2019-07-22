@@ -21,7 +21,7 @@ export default class CustomSidebar extends Component {
         const panes = [
             { 
                 menuItem: {
-                    content: 'Participants',
+                    content: 'PARTICIPANTS',
                     icon: 'users',
                     key: 'users'
                 },
@@ -37,7 +37,7 @@ export default class CustomSidebar extends Component {
             },
             { 
                 menuItem: {
-                    content: 'Meeting locations',
+                    content: 'MEETING POINTS',
                     icon:'coffee', key:'locations'
                 },
                 pane: {
@@ -57,11 +57,11 @@ export default class CustomSidebar extends Component {
                 direction='left'
                 onHide={this.onHide}
                 visible={visible}
-                width='very wide'
+                width='wide'
 
                 as={Tab}
                 panes={panes}
-                menu={{color:'blue'}}
+                menu={{className:'margotColor', inverted: true}}
                 renderActiveOnly={false}
             >
             </Sidebar>
