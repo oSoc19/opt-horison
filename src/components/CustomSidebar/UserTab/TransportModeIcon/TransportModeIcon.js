@@ -5,7 +5,9 @@ import './TransportModeIcon.css';
 
 export default class TransportModeIcon extends Component {
 	render() {
-		const {mode} = this.props;
+		const {modeProperties} = this.props;
+		const mode = modeProperties.mode;
+		const color = modeProperties.color;
 		let icon;
 		if (mode === 'bike') {
 			icon = 'bicycle';
@@ -20,6 +22,6 @@ export default class TransportModeIcon extends Component {
 		} else {
 			icon = 'blind';
 		}
-		return (<Icon name={icon} size='big' />);
+		return (<Icon name={icon} size='big' style={{color}} />);
 	}
 }
