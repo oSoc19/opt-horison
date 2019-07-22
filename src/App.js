@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Sidebar, Segment } from 'semantic-ui-react';
+import { Sidebar, Segment, Dimmer, Loader } from 'semantic-ui-react';
 import CustomSidebar from './components/CustomSidebar';
 import CustomMap from './components/CustomMap';
 import ExpandCollapseButton from './components/CustomSidebar/ExpandCollapseButton';
@@ -13,6 +13,20 @@ const BOSA_USER_LOCATION      = [4.356331, 50.860699];
 const HERMAN_USER_LOCATION    = [4.350018, 50.865685];
 const KBC_USER_LOCATION       = [4.346777, 50.860929];
 const GAUCHERET_USER_LOCATION = [4.360043, 50.864025];
+
+const LOADING_MESSAGES = [
+  "A server would have timed out by now, we are still going", 
+  "Slow but steady wins the race", 
+  "It is only by determination that the snail reaches the ark",
+  "Yeah I know, it takes time to load, right? But at least, it's working!",
+  "This might take a while",
+  "Please hang in there",
+  "Almost there",
+  "It should show up soon... Anyyyy second now!",
+  "The hamsters in your device are working overtime to compute an overlay!",
+  "I know, we're slow, but a server would've bailed you by now!",
+  "Any minute now"
+];
 
 export default class App extends Component {
   constructor(props) {
@@ -35,11 +49,12 @@ export default class App extends Component {
       visible: true,
       participants: [
         new User('Tim', 15, 'walk', BOSA_USER_LOCATION, '#F7C282'),
-        new User('Bert', 10, 'car', HERMAN_USER_LOCATION, '#C4445B'),
-        new User('Tinaël', 20, 'walk', KBC_USER_LOCATION, '#28A987'),
-        new User('Pieter', 10, 'car', GAUCHERET_USER_LOCATION, '#353682')        
+        new User('Bert', 15, 'walk', HERMAN_USER_LOCATION, '#C4445B'),
+        new User('Tinaël', 15, 'walk', KBC_USER_LOCATION, '#28A987'),
+        new User('Pieter', 15, 'walk', GAUCHERET_USER_LOCATION, '#353682')
       ],
       loading: false,
+      loadingMessage: '',
       pointSets: PointSetsData.getAllPointSets(),
       shouldUpdate: false,
     };
@@ -75,10 +90,15 @@ export default class App extends Component {
   }
   
   onLoadingStart() {
-    this.setState({loading: true});
+    let pid = setInterval(() => {
+      let loadingMessage = LOADING_MESSAGES[Math.floor(Math.random()*10)];
+      this.setState({loadingMessage});
+    }, 5000);
+    this.setState({intervalId: pid, loading: true});
   }
 
   onLoadingEnd() {
+    clearInterval(this.state.intervalId);
     this.setState({loading:false});
   }
 
@@ -126,7 +146,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { visible, participants, mapCenter, initialUserLocation, loading } = this.state;
+    const { visible, participants, mapCenter, initialUserLocation, loading, loadingMessage } = this.state;
 
     return (
       <Sidebar.Pushable as={Segment}>
@@ -151,7 +171,10 @@ export default class App extends Component {
         />
     
         <Sidebar.Pusher>
-          <Segment loading={loading}>
+          <Segment>
+            <Dimmer active={loading} inverted>
+              <Loader size='large'>{loadingMessage}</Loader>
+            </Dimmer>
             <CustomMap
               ref={this.mapRef}  
               onLoadingStart={this.onLoadingStart}
