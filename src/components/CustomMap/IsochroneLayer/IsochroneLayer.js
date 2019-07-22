@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { GeoJSONLayer } from 'react-mapbox-gl';
 
+/**
+ * This component draws individual isochrones for users, (i.e. the dotted lines
+ * you see on the map.). However as they are pretty distracting, they're
+ * currently not shown on the map. You can use them for debugging purposes
+ * though.
+ */
 export default class IsochroneLayer extends Component {
     static defaultProps = {
         polygons: [],

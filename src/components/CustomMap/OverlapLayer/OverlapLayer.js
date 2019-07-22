@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
 import { GeoJSONLayer } from 'react-mapbox-gl';
 
+/**
+ * This component is responsible for displaying the overlapping area to users.
+ */
 export default class OverlapLayer extends Component {
     static defaultProps = {
         polygon: [],
         color: '#008080',
         opacity: 0.4
     };
-
-
-    constructor(props) {
-        super(props);
-
-        console.log("overlap polygon: ", props.polygon);
-    }
-
 
     render() {
         return (
