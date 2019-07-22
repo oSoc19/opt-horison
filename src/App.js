@@ -34,10 +34,10 @@ export default class App extends Component {
       initialUserLocation: INITIAL_USER_LOCATION,
       visible: true,
       participants: [
-        new User('Tim', 15, 'walk', BOSA_USER_LOCATION, 'green'),
-        new User('Bert', 15, 'walk', HERMAN_USER_LOCATION, 'red'),
-        new User('Tinaël', 15, 'walk', KBC_USER_LOCATION, 'blue'),
-        new User('Pieter', 15, 'walk', GAUCHERET_USER_LOCATION, 'orange')        
+        new User('Tim', 15, 'walk', BOSA_USER_LOCATION, '#F7C282'),
+        new User('Bert', 15, 'walk', HERMAN_USER_LOCATION, '#C4445B'),
+        new User('Tinaël', 15, 'walk', KBC_USER_LOCATION, '#28A987'),
+        new User('Pieter', 15, 'walk', GAUCHERET_USER_LOCATION, '#353682')        
       ],
       loading: false,
       pointSets: PointSetsData.getAllPointSets(),
@@ -108,7 +108,12 @@ export default class App extends Component {
           const pointSet = pointSets.find(ps => ps.name === pointSetName);
           pointSet.active = !pointSet.active;
           this.setState({ pointSets });
-          this.mapRef.current.setPoints()
+          // Timeout so React can propagate its state first, otherwise the
+          // PoI update will only show when the user clicks twice, which 
+          // is too late.
+          setTimeout(() => {
+            this.mapRef.current.setPoints()
+          }, 50);
       };
   };
 

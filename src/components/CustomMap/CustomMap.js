@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import PoiLayer from './PoiLayer/PoiLayer.js';
 import IsochroneLayer from './IsochroneLayer/IsochroneLayer.js';
+import OverlapLayer from './OverlapLayer/OverlapLayer.js';
 import { multipleOverlap } from '../../iso/isochrone.js';
 
 import './CustomMap.css';
@@ -103,17 +104,16 @@ export default class CustomMap extends Component {
 				containerStyle={containerStyle}
                 center={center}
             >
-                <IsochroneLayer polygons={[overlap.feature]} />
+                <OverlapLayer polygon={overlap.feature} />
                 <PoiLayer overlap={overlap.features} points={points} />
-                
+
                 {participants.map((participant, index) => (
                     <div key={index}>
                         <IsochroneLayer
                             key={index}
                             polygons={participant.isochrone.features}
                             color={participant.color}
-                            opacity={0.1} 
-                        />    
+                        />
                         <Layer
                             type='circle'
                             key={`${participant.guid}-marker${index}`}
