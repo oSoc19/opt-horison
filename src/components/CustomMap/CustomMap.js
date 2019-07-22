@@ -118,7 +118,7 @@ export default class CustomMap extends Component {
                                 'circle-radius': 10,
                                 'circle-blur': 0.15,
                                 'circle-color': participant.color,
-                                'circle-stroke-color': '#000000'
+                                'circle-stroke-color': 'transparent'
                             }}
                         >
                             <Feature
