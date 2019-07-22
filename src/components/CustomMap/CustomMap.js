@@ -84,8 +84,12 @@ export default class CustomMap extends Component {
         
         await this.setPolygons();
         this.setPoints();
-        this.props.onCenterChange(this.state.overlap.center.geometry.coordinates);
-        
+        if (this.state.overlap.center 
+            //|| this.state.overlap.center.geometry 
+            //|| this.state.overlap.center.geometry.coordinates.length > 0) 
+        ){
+                this.props.onCenterChange(this.state.overlap.center.geometry.coordinates);
+        }        
         this.props.onLoadingEnd();
     }
 

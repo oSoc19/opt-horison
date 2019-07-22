@@ -1,7 +1,7 @@
 import Geometry from './Geometry';
 
 export default class Feature {
-	constructor(coordinates, timeinmillisec) {
+	constructor(coordinates = [], timeinmillisec = 0) {
 		this.type = "Feature";
 		this.geometry = new Geometry(coordinates);
 		this.geometry.type = "Polygon";
