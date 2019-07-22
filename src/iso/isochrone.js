@@ -52,22 +52,23 @@ async function multipleOverlap(coordinates, modes, maxes) {
     }
     // generate intervals
     var intervalArray = generateIntervalArray(maxes);
-    // generate isochrones+overlap
-    var i = 0;
     var overlap = null;
-    while(i < intervalArray[0].length && checkOverlap(overlap)) {        
-        var tempIsochrones = [];
-        var j = 0;
-        for (let generator of generators) {// generate the isochrones at time for all generators and store them so we can intersect
-            var time = intervalArray[j][i];
-            //console.log("time: " + time);
-            let isochrone = await generateIsochroneFromGenerator(generator, time);
-            collections[j].addOneFeature(isochrone);
-            tempIsochrones.push(isochrone);
-            j++;            
+    if(intervalArray.length > 0){
+        var i = 0;
+        while(i < intervalArray[0].length && checkOverlap(overlap)) {        
+            var tempIsochrones = [];
+            var j = 0;
+            for (let generator of generators) {// generate the isochrones at time for all generators and store them so we can intersect
+                var time = intervalArray[j][i];
+                //console.log("time: " + time);
+                let isochrone = await generateIsochroneFromGenerator(generator, time);
+                collections[j].addOneFeature(isochrone);
+                tempIsochrones.push(isochrone);
+                j++;            
+            }
+            overlap = multipleIntersection(tempIsochrones);  
+            i++;    
         }
-        overlap = multipleIntersection(tempIsochrones);  
-        i++;    
     }
     var resultingOverlap = new Feature();
     var center = null;
@@ -115,11 +116,17 @@ function checkOverlap(overlap) {//checks if the overlap is null or smaller than 
 }
 
 function multipleIntersection(isochrones) {
-    var result = intersect(isochrones.pop(), isochrones.pop());
+    var result = null;
+    if (isochrones.length < 1){
+        return result;
+    }else if (isochrones.length == 1) {
+        result = isochrones[0];
+    }else {
+        result = intersect(isochrones.pop(), isochrones.pop());
+    }
     while (result != null && isochrones.length >0) {
         result = intersect(result, isochrones.pop());
     }
-
     if (result == null) {
         console.log("no overlap found");
     } else {
