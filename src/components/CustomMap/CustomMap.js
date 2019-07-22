@@ -100,17 +100,16 @@ export default class CustomMap extends Component {
 				containerStyle={containerStyle}
                 center={center}
             >
-                <OverlapLayer polygon={[overlap.feature]} />
+                <OverlapLayer polygon={overlap.feature} />
                 <PoiLayer overlap={overlap.features} points={points} />
-                
+
                 {participants.map((participant, index) => (
                     <div key={index}>
                         <IsochroneLayer
                             key={index}
                             polygons={participant.isochrone.features}
                             color={participant.color}
-                            opacity={0.1} 
-                        />    
+                        />
                         <Layer
                             type='circle'
                             key={`${participant.guid}-marker${index}`}

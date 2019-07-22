@@ -5,7 +5,7 @@ export default class IsochroneLayer extends Component {
     static defaultProps = {
         polygons: [],
         color: '#008080',
-        opacity: 1
+        opacity: 0.2
     };
 
     render() {
@@ -17,8 +17,9 @@ export default class IsochroneLayer extends Component {
                 }}
                 linePaint={{
                     'line-color': this.props.color,
-                    'line-width': 5,
-                    'line-opacity': this.props.opacity
+                    'line-width': 3,
+                    'line-opacity': this.props.opacity,
+                    'line-dasharray': [2,2,2]
                 }}
             />
         );
