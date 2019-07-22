@@ -35,9 +35,9 @@ export default class App extends Component {
       visible: true,
       participants: [
         new User('Tim', 15, 'walk', BOSA_USER_LOCATION, '#F7C282'),
-        new User('Bert', 10, 'car', HERMAN_USER_LOCATION, '#C4445B'),
-        new User('Tinaël', 20, 'walk', KBC_USER_LOCATION, '#28A987'),
-        new User('Pieter', 10, 'car', GAUCHERET_USER_LOCATION, '#353682')        
+        new User('Bert', 15, 'walk', HERMAN_USER_LOCATION, '#C4445B'),
+        new User('Tinaël', 15, 'walk', KBC_USER_LOCATION, '#28A987'),
+        new User('Pieter', 15, 'walk', GAUCHERET_USER_LOCATION, '#353682')        
       ],
       loading: false,
       pointSets: PointSetsData.getAllPointSets(),
