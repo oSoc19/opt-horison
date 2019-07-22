@@ -5,7 +5,7 @@ export default class IsochroneLayer extends Component {
     static defaultProps = {
         polygons: [],
         color: '#008080',
-        opacity: 0.2
+        opacity: 0.01
     };
 
     render() {
