@@ -21,7 +21,8 @@ export default class CustomMap extends Component {
                 feature: {},
                 center: {}
             },
-            points: []
+            points: [],
+            zoom: [13]
         };
 	}
 
@@ -45,7 +46,6 @@ export default class CustomMap extends Component {
 
         for (let i = 0; i < participants.length; i++) {
             participants[i].isochrone = resultContainer.userIsochrones[i];
-            console.log(participants[i].isochrone);
         }
 
         this.setState({
@@ -87,15 +87,15 @@ export default class CustomMap extends Component {
         if (this.state.overlap.center 
             //|| this.state.overlap.center.geometry 
             //|| this.state.overlap.center.geometry.coordinates.length > 0) 
-        ){
+        ) {
                 this.props.onCenterChange(this.state.overlap.center.geometry.coordinates);
-        }        
+        }
         this.props.onLoadingEnd();
     }
 
 	render() {
         const {center, participants} = this.props;
-        const {containerStyle, points, overlap} = this.state;
+        const {containerStyle, zoom, points, overlap} = this.state;
 
 		return (
 			<Map // eslint-disable-next-line
@@ -103,6 +103,7 @@ export default class CustomMap extends Component {
 				className='CustomMap'
 				containerStyle={containerStyle}
                 center={center}
+                zoom={zoom}
             >
                 <OverlapLayer polygon={overlap.feature} />
                 <PoiLayer overlap={overlap.features} points={points} />
