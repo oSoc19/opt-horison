@@ -41,7 +41,7 @@ function getAllPointSets() {
         new PointSet({
             name: "Bar",
             description: "An establishment that sells alcoholic drinks.",
-            active: false,
+            active: true,
             data: barData,
             mapboxIcon: "bar",
             semanticIcon: "glass martini"
@@ -49,7 +49,7 @@ function getAllPointSets() {
         new PointSet({
             name: "Coffee",
             description: "An establishment selling beverages and snacks.",
-            active: true,
+            active: false,
             data: coffeeData,
             mapboxIcon: "cafe",
             semanticIcon: "coffee"
@@ -57,7 +57,7 @@ function getAllPointSets() {
         new PointSet({
             name: "Restaurant",
             description: "An establishment selling full meals.",
-            active: true,
+            active: false,
             data: restoData,
             mapboxIcon: "restaurant",
             semanticIcon: "food"

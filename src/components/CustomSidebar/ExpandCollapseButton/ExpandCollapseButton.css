@@ -1,7 +1,7 @@
 .arrow-hide {
     position: fixed;
     top: 50px;
-    left: 465px;
+    left: 340px;
     z-index: 999 !important;
 }
 
@@ -10,4 +10,9 @@
     top: 50px;
     left: 0;
     z-index: 999 !important;
+}
+
+.ui.margotArrow.button, .ui.margotArrow.buttons .button {
+    background-color: #0B132B;
+    color: white;
 }

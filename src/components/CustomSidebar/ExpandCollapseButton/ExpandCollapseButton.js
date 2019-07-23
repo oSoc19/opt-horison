@@ -21,7 +21,7 @@ export default class ExpandCollapseButton extends Component {
 
 	render() {
 		return this.props.visible
-			? <Button color='red' size='mini' className='arrow-hide' onClick={this.handleHideClick} icon='chevron left' />
-			: <Button color='green' size='mini' className='arrow-show' onClick={this.handleShowClick} icon='chevron right' />;
+			? <Button size='mini' className='margotArrow arrow-hide' onClick={this.handleHideClick} icon='chevron left' />
+			: <Button size='mini' className='margotArrow arrow-show' onClick={this.handleShowClick} icon='chevron right' />;
 	}
 }

@@ -11,24 +11,26 @@ export default class ParticipantRow extends Component {
 			<Table.Row>
 				<Table.Cell>
 					<Header>
-						<Icon name='user circle' size='small' style={{color}}/>
-						<Header.Content>{name}</Header.Content>
+						<Icon name='user' size='small' style={{color}}/>
+						<Header.Content>
+							{name}
+							<Header.Subheader>{duration} min</Header.Subheader>
+						</Header.Content>
 					</Header>
 				</Table.Cell>
-				<Table.Cell>
-					{duration} min
-				</Table.Cell>
-				<Table.Cell>
+
+				<Table.Cell textAlign='right'>
 				{modes.map(mode => (
-					<TransportModeIcon key={`${guid}&${mode}`} mode={mode} />
+					<TransportModeIcon key={`${guid}&${mode}`} modeProperties={{color, mode}}/>
 				))}
 				</Table.Cell>
-				<Table.Cell>
-					<Button 
-						basic
-						icon='trash alternate'
-						color='red'
+
+				<Table.Cell textAlign='right'>
+					<Button
+						circular
+						icon='delete'
 						onClick={() => this.props.onParticipantRemove(guid)}
+						style={{backgroundColor: 'transparent'}}
 					/>
 				</Table.Cell>
 			</Table.Row>
