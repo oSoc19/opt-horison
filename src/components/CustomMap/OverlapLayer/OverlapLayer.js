@@ -8,14 +8,6 @@ export default class OverlapLayer extends Component {
         opacity: 1
     };
 
-
-    constructor(props) {
-        super(props);
-
-        console.log("overlap polygon: ", props.polygon);
-    }
-
-
     render() {
         return (
             <GeoJSONLayer
