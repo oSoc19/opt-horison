@@ -17,8 +17,8 @@ export default class UserCreationModal extends Component {
 
 	render() {
 		return (
-			<Modal size='small' open={this.props.modalOpen} onClose={this.onClose} closeIcon>
-				<Header icon='user' content='Add New Participant' />
+			<Modal size='tiny' open={this.props.modalOpen} onClose={this.onClose} closeIcon>
+				<Header icon='user' content='NEW PARTICIPANT' />
 				<Modal.Content>
 					<UserCreationForm initialUserLocation={this.props.initialUserLocation} addParticipant={this.props.addParticipant}/>
 				</Modal.Content>
