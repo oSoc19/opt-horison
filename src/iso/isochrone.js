@@ -119,18 +119,19 @@ function multipleIntersection(isochrones) {
     var result = null;
     if (isochrones.length < 1){
         return result;
-    }else if (isochrones.length == 1) {
+    } else if (isochrones.length === 1) {
         result = isochrones[0];
-    }else {
+    } else {
         result = intersect(isochrones.pop(), isochrones.pop());
     }
     while (result != null && isochrones.length >0) {
         result = intersect(result, isochrones.pop());
     }
     if (result == null) {
-        console.log("no overlap found");
+        //console.log("no overlap found");
     } else {
-        console.log("there is a overlap");
+        //console.log("there is a overlap");
+        
         //do something with the result
         //question: do we want to return null if no intersection found? probobly right?
     }
@@ -152,7 +153,7 @@ async function findOptimum(location1, location2, max) {
     var intersection = null;
     while (i < intervals.length && intersection == null ){
         var time = intervals[i];
-        console.log("time = "+ time);
+        // console.log("time = "+ time);
         var isochrone1 = await generateIsochroneFromGenerator(generator1, time);
         var isochrone2 = await generateIsochroneFromGenerator(generator2, time);
         collection1.addOneFeature(isochrone1);
@@ -161,14 +162,14 @@ async function findOptimum(location1, location2, max) {
         i++;
     }
     if (intersection != null) {
-        console.log("start intersection");
-        console.log(intersection.geometry.coordinates);
-        console.log("end of intersection");
+        // console.log("start intersection");
+        // console.log(intersection.geometry.coordinates);
+        // console.log("end of intersection");
         return intersection;
     } else {
         //TODO: integrate this message in visuals
-        console.log(`There is no place for you to meet within ${max} minutes`);
-        console.log(intersection);
+        // console.log(`There is no place for you to meet within ${max} minutes`);
+        // console.log(intersection);
         return new Feature();
     }
        
