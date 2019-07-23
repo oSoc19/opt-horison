@@ -21,7 +21,7 @@ HorISOn helps small groups of people find a suitable meeting location.
 ## License
 
 This project is licensed under the MIT License - see the
-[LICENSE.md](LICENSE.md) file for details
+[LICENSE.md](LICENSE) file for details
 
 ## Acknowledgments
 
