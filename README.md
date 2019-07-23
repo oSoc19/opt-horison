@@ -7,7 +7,7 @@ HorISOn helps small groups of people find a suitable meeting location.
 * **Personal:** Based on your preferred mode of transport, available time and interests!
 * **Client-based:** All of our computations are done on the client side, no
   pesky time-outs for expensive queries!
-* Powered by Linked Open Data and [OpenPlanner Team](https://openplanner.team/)'s [planner.js](https://planner.js.org/)
+* Powered by Linked Open Data and [Open Planner Team](https://openplanner.team/)'s [planner.js](https://planner.js.org/)
   library.
 
 ![](assets/horison.gif)
