@@ -10,37 +10,14 @@ export default class UserTab extends Component {
 	constructor(props) {
 		super(props);
 
-		this.handleSort = this.handleSort.bind(this);
 		this.handleAdd = this.handleAdd.bind(this);
 		this.handleRemove = this.handleRemove.bind(this);
 		this.showModal = this.showModal.bind(this);
 		this.onModalClose = this.onModalClose.bind(this);
 
 		this.state = {
-			modalOpen: false,
-			column: null,
-			direction: null
+			modalOpen: false
 		};
-	}
-
-	handleSort(clickedColumn) {
-		const { participants } = this.props;
-		const { column, direction } = this.state;
-	
-		if (column !== clickedColumn) {
-		  this.setState({
-			column: clickedColumn,
-			direction: 'ascending'
-		  });
-		  this.props.onParticipantsChange(_.sortBy(this.props.participants, [clickedColumn]));
-	
-		  return;
-		}
-	
-		this.setState({
-		  direction: direction === 'ascending' ? 'descending' : 'ascending',
-		});
-		this.props.onParticipantsChange(participants.reverse());
 	}
 
 	handleAdd(participant) {
@@ -72,8 +49,6 @@ export default class UserTab extends Component {
 	}
 
 	render() {
-		const { column, direction } = this.state;
-
 		return (
 			<div>
 				<UserCreationModal
@@ -82,30 +57,7 @@ export default class UserTab extends Component {
 					closeModal={this.onModalClose} 
 					addParticipant={this.handleAdd} 
 				/>
-				<Table sortable celled compact unstackable>
-					<Table.Header>
-						<Table.Row>
-							<Table.HeaderCell 
-								sorted={column === 'name' ? direction : null}
-								onClick={() => this.handleSort('name')}
-								content='Participant' 
-							/>
-							<Table.HeaderCell
-								sorted={column === 'duration' ? direction : null}
-								onClick={() => this.handleSort('duration')}
-								content='Max Duration'
-							/>
-							<Table.HeaderCell
-								sorted={column === 'mode' ? direction : null}
-								onClick={() => this.handleSort('mode')}
-								content='Mode'
-							/>
-							<Table.HeaderCell
-								content='Delete?'
-							/>
-						</Table.Row>
-					</Table.Header>
-
+				<Table basic unstackable>
 					<Transition.Group
 						as={Table.Body}
 						duration={500}
@@ -120,22 +72,23 @@ export default class UserTab extends Component {
 						)}
 					</Transition.Group>
 
-					<Table.Footer fullWidth>
+					<Table.Footer>
 						<Table.Row>
-							<Table.HeaderCell colSpan='4'>
-								<Button 
-									icon='add user' 
+							<Table.HeaderCell colSpan='5'>							
+								<Button
+									floated='right'
+									icon='plus' 
 									labelPosition='left' 
-									color='blue'
-									inverted
+									color='orange'
 									size='small' 
 									content='Add participant' 
 									onClick={this.showModal}
 								/>
 								<Button 
+									floated='right'
 									icon='refresh' 
 									labelPosition='left' 
-									color='green'
+									color='orange'
 									inverted
 									size='small' 
 									content='Refresh map' 

@@ -4,8 +4,8 @@ import { GeoJSONLayer } from 'react-mapbox-gl';
 export default class OverlapLayer extends Component {
     static defaultProps = {
         polygon: [],
-        color: '#008080',
-        opacity: 0.4
+        color: 'rgba(11, 52, 99, 0.6)',
+        opacity: 1
     };
 
 
