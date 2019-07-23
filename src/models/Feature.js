@@ -1,5 +1,5 @@
 import Geometry from './Geometry';
-
+/**Implementation of the Feature class defined in GeoJSON.*/
 export default class Feature {
 	constructor(coordinates = [], timeinmillisec = 0) {
 		this.type = "Feature";
