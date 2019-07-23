@@ -1,3 +1,5 @@
+![](assets/horison.png)
+
 # [HorISOn](https://horison-map.be) &middot; [![Netlify Status](https://api.netlify.com/api/v1/badges/bb4677d0-d448-4fb9-8133-d91486923188/deploy-status)](https://app.netlify.com/sites/distracted-shaw-67fdd2/deploys)
 
 HorISOn helps small groups of people find a suitable meeting location.
@@ -12,9 +14,9 @@ HorISOn helps small groups of people find a suitable meeting location.
 
 ## Authors
 
-* **Tinaël Devresse** - *Student* - [GitHub Profile](https://github.com/hunteroi)
-* **Bert Schoovaerts** - *Student* - [GitHub Profile](https://github.com/bertschoovaerts)
-* **Tim Baccaert** - *Student* - [GitHub Profile](https://github.com/timutable)
+* [@HunteRoi](https://github.com/hunteroi)
+* [@BertSchoovaerts](https://github.com/bertschoovaerts)
+* [@timutable](https://github.com/timutable)
 
 ## License
 
@@ -24,6 +26,5 @@ This project is licensed under the MIT License - see the
 ## Acknowledgments
 
 * Made with love at [Open Summer of Code 2019](https://osoc.be/2019)
-* Hat tip to **Harm Delva**, **Tim Van Hee**, **Julian Rojas** and **Pieter
-  Colpaert** for making this project possible.
+* Hat tip to [Open Planner Team](https://openplanner.team/) for making this project possible.
 
