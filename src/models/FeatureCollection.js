@@ -1,5 +1,5 @@
 import Feature from './Feature';
-
+/** Implementation of the FeatureCollection class defined in GeoJSON. */
 export default class FeatureCollection {
     constructor() {
         this.type = "FeatureCollection";
