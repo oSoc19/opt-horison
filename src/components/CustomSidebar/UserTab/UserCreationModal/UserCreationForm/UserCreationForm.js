@@ -1,5 +1,6 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { Form } from 'semantic-ui-react';
+import TransportModeGroup from './TransportModeGroup';
 
 import './UserCreationForm.css';
 import {User} from '../../../../../models';
@@ -9,20 +10,26 @@ export default class UserCreationForm extends Component {
 		super(props);
 
 		this.onChange = this.onChange.bind(this);
+		this.onDurationChange = this.onDurationChange.bind(this);
+		this.onModeChange = this.onModeChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 
 		this.state = {
+			allModes: [
+				{ name: 'car', semanticicon: 'car', active: true },
+				{ name: 'walking', semanticicon: 'blind', active: true },
+				{ name: 'train', semanticicon: 'train', active: false },
+				{ name: 'bike', semanticicon: 'bicycle', active: false }
+			],
+
 			name: '',
 			duration: '',
 			modes: ['walking'],
-			color: '#FFA500',
-			agreement: false,
+			color: '#353682',
 
 			nameError: false,
 			durationError: false,
-			modesError: false,
 			colorError: false,
-			agreementError: false,
 			formError: false
 		};
 	}
@@ -38,7 +45,7 @@ export default class UserCreationForm extends Component {
 	onSubmit(e) {
 		e.preventDefault();
 		let error = false;
-		const {name, duration, modes, color, agreement } = this.state;
+		const {name, duration, modes, color } = this.state;
 
 		if (name === '') {
 			this.setState({nameError: true});
@@ -54,24 +61,10 @@ export default class UserCreationForm extends Component {
 			this.setState({durationError: false});
 		}
 
-		if (!modes || modes.length === 0 || modes === []) {
-			this.setState({modesError: true});
-			error = true;
-		} else {
-			this.setState({modesError: false});
-		}
-
 		if (!color || color.length === 0 || !this.isColor(color)) {
 			this.setState({colorError: true});
 		} else {
 			this.setState({colorError: false});
-		}
-
-		if (!agreement) {
-			this.setState({agreementError: true});
-			error = true;
-		} else {
-			this.setState({agreementError: false});
 		}
 
 		if (error) {
@@ -80,38 +73,35 @@ export default class UserCreationForm extends Component {
 		}
 		this.setState({formError: false});
 		
-		const person = new User(name, duration, modes, this.props.initialUserLocation, color);
-
-		console.log("person: ",person);
-
-		this.props.addParticipant(person);
+		this.props.addParticipant(new User(name, duration, modes, this.props.initialUserLocation, color));
 	}
 
 	onChange(e, {name, value}) {
 		e.preventDefault();
-
-		if ([name].toString() === 'mode') {
-			const {modes} = this.state;
-			if (modes && modes.length > 0 && modes.includes(value)) {
-				modes.splice(modes.indexOf(value), 1);
-			} else {
-				modes.push(value);
-			}
-			this.setState({modes});
-			return;
-		}
-
-		if (value === 'agreed') {
-			this.setState({agreement: !this.state.agreement});
-			return;
-		}
 		
 		this.setState({[name]: value});
 	}
 
+	onModeChange(mode) {
+		this.setState({modes: [mode.toLowerCase()]});
+	}
+
+	onDurationChange(e) {
+		e.preventDefault();
+		let value = e.target.value;
+		if (!isNaN(parseInt(value))) {
+			value = parseInt(value);
+		} else {
+			value = 5;
+		}
+		this.setState({duration : value});
+	}
+
 	render() {
-		let { name, duration, modes, color, agreement,
-			nameError, durationError, modesError, colorError, agreementError, formError
+		let { 
+			allModes, 
+			name, duration, modes, color,
+			nameError, durationError, colorError, formError
 		} = this.state;
 
 		return (
@@ -119,101 +109,89 @@ export default class UserCreationForm extends Component {
 				onSubmit={this.onSubmit}
 				error={formError}
 			>
-				<Form.Field inline>
-					<Form.Input
-						required
-						type='text'
-						label='Name' 
-						name='name'
-						placeholder="Participant's name"
-						onChange={this.onChange}
-						error={nameError}
-						value={name}
-					/>
-				</Form.Field>
-				<Form.Field inline>
-					<Form.Input
-						required
-						type='number'
-						label='Duration'
-						name='duration'
-						placeholder='Maximum duration' 
-						onChange={this.onChange}
-						error={durationError}
-						value={duration}
-						min={1}
-						max={200}
-					/>
-				</Form.Field>
-				<Form.Group inline>
-					<Form.Field label='Transport mode' required />
-					<Form.Checkbox
-						name='modes'
-						value='walking'
-						type='checkbox'
-						defaultChecked={true}
-						toggle
-						label='Walking'
-						onChange={this.onChange}
-						error={modesError}
-					/>
-					<Form.Checkbox
-						name='modes'
-						value='car'
-						type='checkbox'
-						toggle
-						label='Car'
-						onChange={this.onChange}
-						error={modesError}
-					/>
-					<Form.Checkbox
-						name='modes'	
-						value='train'
-						type='checkbox'	
-						disabled
-						toggle
-						label='Train'
-						onChange={this.onChange}
-						error={modesError}
-					/>
-					<Form.Checkbox
-						name='modes'
-						value='bicycle'
-						type='checkbox'
-						disabled
-						toggle
-						label='Bike'
-						onChange={this.onChange}
-						error={modesError}
-					/>
+				<Form.Group width={2}>
+					<Form.Field className='name'>
+						<Form.Input
+							type='text'
+							label='NAME:' 
+							name='name'
+							placeholder="Participant's name"
+							onChange={this.onChange}
+							error={nameError}
+							value={name}
+							input={{
+								style: {
+									height: '50px',
+									width: '313px',
+									boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.15)',
+									borderRadius: '0px',
+									fontSize: '18px',
+									fontFamily: 'Karla',
+									lineHeight: '21px',
+									letterSpacing: '-0.03em',
+									padding: '15px'
+								}
+							}}
+						/>
+					</Form.Field>
+					<Form.Field className='marker'>
+						<Form.Input
+							name='color'
+							id='color'
+							type='color'
+							value={color}
+							label='MARKER:'
+							onChange={this.onChange}
+							error={colorError}
+							input={{
+								style: {
+									height: '50px', 
+									width: '90px', 
+									padding: '0',
+									backgroundColor: color,
+									borderRadius: '0px',
+									boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.15)',
+									appearance: 'none'
+								}
+							}}
+						/>
+					</Form.Field>
 				</Form.Group>
-				<Form.Group inline>
-					<Form.Input
-						name='color'
-						id='color'
-						type='color'
-						value={color}
-						label='Marker color'
-						onChange={this.onChange}
-						error={colorError}
-						input={{style: {height: '38px', width: '35px', padding: '5px'}}}
-					/>
+				<Form.Group>
+					<TransportModeGroup modes={allModes} onModeChange={this.onModeChange}/>
 				</Form.Group>
-				<Form.Checkbox
-					name='agreement'
-					value='agreed'
-					type='checkbox'
-					required
-					label='I agree to the Terms and Conditions'
-					onChange={this.onChange}
-					error={agreementError}
-				/>
+				<Form.Field inline>
+					<div className="field">
+						<label>DURATION:</label>
+						<div className='ui input'>
+							<input
+								type='number'
+								name='duration'
+								placeholder='Maximum time' 
+								onChange={this.onDurationChange}
+								error={durationError ? durationError : undefined}
+								value={duration}
+								min={5}
+								max={240}
+								id='durationInput'
+							/>
+						</div>
+						<span className='metrics'>min</span>
+					</div>
+				</Form.Field>
+				<br/>
+
 				<Form.Button 
 					content='Submit' 
 					fluid 
 					type='submit' 
 					color='blue'
-					disabled={!name || !duration || !modes || !agreement}
+					disabled={!name || !duration || !modes}
+					style={{
+						background: '#0B132B',
+						boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.15)',
+						borderRadius: '5px'
+					}}
 				/>
 			</Form>
 		);
