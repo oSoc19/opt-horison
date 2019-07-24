@@ -1,0 +1,40 @@
+/* laptop */
+.laptop {
+  float: left;
+  width: 350px;
+  height: 200px;
+  margin: 56px 0 0 0;
+  border: 5px black solid;
+  border-radius: 2px;
+}
+
+.laptop:before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 40px;
+  height: 3px;
+  margin: 196px 0 0 155px;
+  background: white;
+  z-index: 1;
+}
+
+.laptop:after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 390px;
+  height: 8px;
+  margin: 6px 0 0 -24px;
+  background: black;
+  border-radius: 2px;
+}
+
+.laptop .content {
+  width: 340px;
+  height: 190px;
+  margin: 0px 0 0 0;
+  padding: 2px;
+  background: white;
+  overflow: hidden;
+}
