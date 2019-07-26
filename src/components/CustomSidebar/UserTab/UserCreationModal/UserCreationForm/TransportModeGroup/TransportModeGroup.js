@@ -17,20 +17,22 @@ export default class TransportModeGroup extends Component {
         const { modes } = this.props;
 
         return (
-            <div className='field'>
+            <div className="field">
                 <label>TRANSPORT MODE:</label>
-            {modes.map((mode, i) => 
-                <TransportModeButton
-                    key={i}
-                    index={i}
-                    isSelected={selectedIndex === i}
-                    mode={mode}
-                    onClick={(index) => {
-                        this.setState({selectedIndex: index});
-                        this.props.onModeChange(mode.name);
-                    }}
-                />
-            )}
+                <div className='mode-container'>
+                {modes.map((mode, i) => 
+                    <TransportModeButton
+                        key={i}
+                        index={i}
+                        isSelected={selectedIndex === i}
+                        mode={mode}
+                        onClick={(index) => {
+                            this.setState({selectedIndex: index});
+                            this.props.onModeChange(mode.name);
+                        }}
+                    />
+                )}
+                </div>
             </div>
         );
     }
