@@ -143,15 +143,16 @@ export default class UserCreationForm extends Component {
 							label='MARKER:'
 							onChange={this.onChange}
 							error={colorError}
+							style={{backgroundColor: color}}
 							input={{
 								style: {
+									opacity: 0,
 									height: '50px', 
-									width: '90px', 
+									width: '70px', 
 									padding: '0',
 									backgroundColor: color,
 									borderRadius: '0px',
-									boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.15)',
-									appearance: 'none'
+									boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.15)'
 								}
 							}}
 						/>

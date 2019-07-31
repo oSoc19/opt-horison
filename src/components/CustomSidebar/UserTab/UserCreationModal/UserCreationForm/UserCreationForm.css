@@ -48,3 +48,7 @@ input[type="color" i] {
     text-align: right;
     padding: 15px;
 }
+
+#color:hover {
+    cursor: pointer;
+}
